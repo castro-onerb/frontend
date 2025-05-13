@@ -1,0 +1,12 @@
+.box-scrollbar::-webkit-scrollbar {
+  width: 0;
+}
+
+.box-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.box-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+}
