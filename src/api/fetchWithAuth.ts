@@ -47,11 +47,10 @@ export async function fetchWithAuth(
   if (response.status === 401) {
     const newToken = await refreshAccessToken();
 
-    if (!newToken) {
-
-      window.location.href = '/';
-      return Promise.reject('Refresh token inválido ou expirado');
-    }
+    // if (!newToken) {
+    //   window.location.href = '/';
+    //   return Promise.reject('Refresh token inválido ou expirado');
+    // }
 
     response = await fetch(input, {
       ...init,

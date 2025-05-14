@@ -17,7 +17,7 @@ export function InputField({ placeholder, children, value, onChange, ...props }:
         placeholder={placeholder}
         value={value}
         onChange={onChange}
-        className="flex-1 py-2 outline-none"
+        className="flex-1 py-4 outline-none"
         {...props}
         />
       {children}

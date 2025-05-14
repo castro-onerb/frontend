@@ -21,4 +21,16 @@
     --color-primary-700: #2D6058;
     --color-primary-800: #204640;
     --color-primary-900: #16302C;
+    --color-primary-9000: #16302C;
+
+    --animate-load-mp: load-mp 3s linear forwards;
+
+    @keyframes load-mp {
+        0% {
+            width: 0;
+        }
+        100% {
+            width: 300%;
+        }
+    }
 }

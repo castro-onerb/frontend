@@ -1,6 +1,9 @@
-import Logo from '@/assets/img/business/logo-horizontal-color.svg'
+import Logo from '@/assets/img/business/logo-horizontal-color.svg';
+import { Button } from '@/components/Button/Button';
+import { Hero } from '@/components/Hero/Hero';
 import { Input } from '@/components/Input/Input'
 import { useLogin } from '@/hooks/useLogin';
+import { useViewport } from '@/utils/ViewportBool';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -13,6 +16,8 @@ export default function Login () {
   const [selectedType, setSelectedType] = useState('');
   const [errors, setErrors] = useState<{ access?: string; password?: string }>({});
   const navigate = useNavigate();
+
+  const { viewer } = useViewport(900);
 
   const ufs = [
     'AC', 'AL', 'AM', 'AP', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA',
@@ -47,21 +52,25 @@ export default function Login () {
   };
 
   return (
-    <div
-      className='bg-primary-500 h-dvh flex items-center justify-center'>
-      <div
-        className='p-10 bg-white sm:rounded-2xl sm:shadow-2xl w-full h-dvh sm:h-auto sm:max-h-full sm:max-w-[369px] flex items-center justify-center'>
-        <div
-          className='flex flex-col gap-10 sm:gap-8 w-full'>
+    <div className="flex items-stretch h-screen bg-primary-50">
+      {!viewer[0] && (
+      <Hero.Root>
+        <Hero.Card className='bg-primary-600'></Hero.Card>
+        <Hero.Card className='bg-primary-700'></Hero.Card>
+        <Hero.Card className='bg-primary-800'></Hero.Card>
+      </Hero.Root>
+      )}
+      <div className="relative flex-1 p-3 bg-primary-50 flex flex-col items-center justify-between">
+        <div className="p-5"></div>
+        <div className="relative flex flex-col gap-10 sm:gap-8 w-full sm:max-h-full max-w-[369px]">
           <div
             className='flex'>
             <img
               src={Logo}
               className='w-40 h-15' />
           </div>
-          {loading && 'Carregando...'}
           <div
-            className='flex flex-col gap-3'>
+            className='relative flex flex-col gap-3'>
             <Input.Root>
               <Input.Label
                 text='Acesso' />
@@ -98,23 +107,26 @@ export default function Login () {
                 placeholder='Sua senha aqui'>
                 <div
                   onClick={() => setTogglePassword(prev => prev === 'password' ? 'text' : 'password')}
-                  className="h-full px-2 py-1 rounded-md hover:bg-zinc-100 cursor-pointer transition">
+                  className="p-2 rounded-md hover:bg-zinc-100 cursor-pointer transition">
                   <Icon style={{ fontSize: 18 }} icon={togglePassword === 'password' ? 'tabler:eye-off' : 'tabler:eye'} />
                 </div>
               </Input.Field>
               {errors.password && <Input.Message text={errors.password} />}
             </Input.Root>
-            <button
-              onClick={prepareLogin}
-              className='p-2 bg-primary-500 hover:bg-primary-600 rounded-lg font-medium text-white cursor-pointer transition'>
-              Entrar
-            </button>
+            <div className="">
+              <a href="#" className='text-primary-500 hover:text-primary-600 hover:underline transition'>Esqueceu sua senha?</a>
+            </div>
+            <Button.Root onClick={prepareLogin}>
+              <Button.Text>{loading ? 'Entrando...' : 'Entrar'}</Button.Text>
+              {loading && <Button.Loading />}
+            </Button.Root>
             {error &&
-              <div className="p-2 border-l-2 border-red-500">
+              <div className="absolute w-full top-full mt-3 p-2 py-3 border-l-2 border-red-500">
                 <p className='text-sm text-red-700'>{error}</p>
               </div>}
           </div>
         </div>
+        <div className="p-5"></div>
       </div>
     </div>
   );
