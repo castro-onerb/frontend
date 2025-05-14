@@ -12,8 +12,6 @@ export default function Login () {
   const [selectedType, setSelectedType] = useState('');
   const [errors, setErrors] = useState<{ access?: string; password?: string }>({});
 
-  const { loading, error, handleLogin } = useLogin();
-
   const ufs = [
     'AC', 'AL', 'AM', 'AP', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA',
     'MT', 'MS', 'MG', 'PA', 'PB', 'PR', 'PE', 'PI', 'RJ', 'RN',
@@ -29,6 +27,7 @@ export default function Login () {
   };
 
   const isCrm = /^[0-9]/.test(access);
+  const { login, loading, error } = useLogin(isCrm ? 'medical' : 'operator');
 
   const prepareLogin = async () => {
     const newErrors: typeof errors = {};
@@ -38,15 +37,8 @@ export default function Login () {
     if (isCrm && !selectedType) newErrors.access = 'É necessário informar o UF do CRM';
 
     setErrors(newErrors);
-
     if (Object.keys(newErrors).length > 0) return;
-
-    let newAccess = access;
-    if (isCrm) {
-      newAccess = `${access}-${selectedType}`;
-    }
-
-    await handleLogin(newAccess, password);
+    await login(isCrm ? `${access}-${selectedType}` : access, password);
   };
 
   return (
