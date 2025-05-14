@@ -1,3 +1,4 @@
+import { fetchWithAuth } from "@/api/fetchWithAuth";
 import { BACKEND_BASE_URL } from "@/config/api";
 import { useState } from "react";
 
@@ -10,7 +11,7 @@ export function useOperatorLogin() {
     setError(null);
 
     try {
-      const response = await fetch(`${BACKEND_BASE_URL}/auth/operator`, {
+      const response = await fetchWithAuth(`${BACKEND_BASE_URL}/auth/operator`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password })
@@ -19,10 +20,12 @@ export function useOperatorLogin() {
       const data = await response.json();
 
       if (!response.ok) throw new Error(data.message ?? 'Erro no login do operador.');
-      console.log(data);
+      localStorage.setItem('access_token', data.access_token);
+      return true;
 
     } catch (err: any) {
       setError(err.message ?? 'Erro desconhecido no login do operador.');
+      return false;
     } finally {
       setLoading(false);
     }

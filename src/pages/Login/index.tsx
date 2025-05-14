@@ -3,6 +3,7 @@ import { Input } from '@/components/Input/Input'
 import { useLogin } from '@/hooks/useLogin';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function Login () {
 
@@ -11,6 +12,7 @@ export default function Login () {
   const [togglePassword, setTogglePassword] = useState<'password' | 'text'>('password');
   const [selectedType, setSelectedType] = useState('');
   const [errors, setErrors] = useState<{ access?: string; password?: string }>({});
+  const navigate = useNavigate();
 
   const ufs = [
     'AC', 'AL', 'AM', 'AP', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA',
@@ -38,7 +40,10 @@ export default function Login () {
 
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) return;
-    await login(isCrm ? `${access}-${selectedType}` : access, password);
+    const success = await login(isCrm ? `${access}-${selectedType}` : access, password);
+    if (success) {
+      navigate('/home');
+    }
   };
 
   return (
