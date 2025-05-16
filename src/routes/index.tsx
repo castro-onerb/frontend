@@ -5,6 +5,7 @@ import { GuestRoute } from "./guest";
 
 const Login = lazy(async () => import("@/pages/Login"));
 const Home = lazy(async () => import("@/pages/Home"));
+const Recover = lazy(async () => import("@/pages/Recover"));
 
 export default function RoutesApp(): ReactElement {
   return (
@@ -21,6 +22,13 @@ export default function RoutesApp(): ReactElement {
               <ProtectedRoute>
                 <Home />
               </ProtectedRoute>
+            } >
+          </Route>
+          <Route path="/recover" 
+            element={
+              <GuestRoute>
+                <Recover />
+              </GuestRoute>
             } >
           </Route>
         </Routes>

@@ -17,7 +17,7 @@ export default function Login () {
   const [errors, setErrors] = useState<{ access?: string; password?: string }>({});
   const navigate = useNavigate();
 
-  const { viewer } = useViewport(900);
+  const { viewer } = useViewport(920);
 
   const ufs = [
     'AC', 'AL', 'AM', 'AP', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA',
@@ -62,7 +62,7 @@ export default function Login () {
       )}
       <div className="relative flex-1 p-3 bg-primary-50 flex flex-col items-center justify-between">
         <div className="p-5"></div>
-        <div className="relative flex flex-col gap-10 sm:gap-8 w-full sm:max-h-full max-w-[369px]">
+        <div className="relative px-4 md:p-0 flex flex-col gap-10 sm:gap-8 w-full sm:max-h-dvh max-w-[369px]">
           <div
             className='flex'>
             <img
@@ -114,7 +114,7 @@ export default function Login () {
               {errors.password && <Input.Message text={errors.password} />}
             </Input.Root>
             <div className="">
-              <a href="#" className='text-primary-500 hover:text-primary-600 hover:underline transition'>Esqueceu sua senha?</a>
+              <a href="/recouver" className='text-primary-500 hover:text-primary-600 hover:underline transition'>Esqueceu sua senha?</a>
             </div>
             <Button.Root onClick={prepareLogin}>
               <Button.Text>{loading ? 'Entrando...' : 'Entrar'}</Button.Text>

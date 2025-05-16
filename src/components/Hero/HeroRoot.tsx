@@ -24,7 +24,6 @@ export function HeroRoot({ children, autoPlay = true, interval = 3000 }: IHeroRo
 
   return (
     <div className="relative flex-1 overflow-hidden rounded-4xl bg-primary-500 m-5">
-      {/* Viewport */}
       <div className="flex transition-transform duration-700 ease-in-out h-full" style={{ transform: `translateX(-${current * 100}%)` }}>
         {cards.map((card, index) => (
           <div key={index} className="flex w-full h-full flex-shrink-0 bg-pink-500">
@@ -44,6 +43,14 @@ export function HeroRoot({ children, autoPlay = true, interval = 3000 }: IHeroRo
           />
         ))}
       </div>
+    </div>
+  );
+}
+
+export function HeroRootMobile({ children, autoPlay = true, interval = 3000 }: IHeroRootProps) {
+  return (
+    <div className="">
+      <div className="p-10 bg-red-500 rounded-full"></div>
     </div>
   );
 }
