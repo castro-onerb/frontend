@@ -2,46 +2,102 @@ import Logo from '@/assets/img/business/logo-horizontal-color.svg';
 import { Hero } from "@/components/Hero/Hero";
 import { Button } from '@/components/Button/Button';
 import { Input } from '@/components/Input/Input'
-import { useViewport } from '@/utils/ViewportBool';
-import { Icon } from '@iconify/react/dist/iconify.js';
+import { Link } from 'react-router-dom';
+import { useRecover } from '@/hooks/auth/recover/useRecover';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Flash } from '@/components/flashMessage/Flash';
 
 export default function Recouver() {
+
+  const { step, error, loading, handleRecover, handleReset, handleResendCode } = useRecover();
+
+  const [email, setEmail] = useState('');
+  const [code, setCode] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleSubmit = async () => {
+    if (step === 'recover') {
+      await handleRecover(email);
+    } else if (step === 'reset') {
+      await handleReset(email, code, password);
+    }
+  };
+
   return (
     <div className="flex items-stretch h-screen bg-primary-50">
       <Hero.Root>
-        <Hero.Card className='bg-primary-600'></Hero.Card>
+        <Hero.Card className="bg-primary-600" />
       </Hero.Root>
       <div className="relative flex-1 p-3 bg-primary-50 flex flex-col items-center justify-center">
-                <div className="relative px-4 md:p-0 flex flex-col gap-10 sm:gap-8 w-full sm:max-h-dvh max-w-[369px]">
-          <div
-            className='flex'>
-            <img
-              src={Logo}
-              className='w-40 h-15' />
+        <div className="relative px-4 md:p-0 flex flex-col gap-10 sm:gap-8 w-full sm:max-h-dvh max-w-[369px]">
+          <div className="flex">
+            <img src={Logo} className="w-40 h-15" />
           </div>
-          <div
-            className='relative flex flex-col gap-3'>
-            <Input.Root>
-              <Input.Label
-                text='E-mail de recuperação' />
+
+          <div className="relative flex flex-col gap-3">
+            {/* EMAIL */}
+            {step !== 'reset' && (<Input.Root>
+              <Input.Label text="E-mail de recuperação" />
               <Input.Field
-                placeholder='Forneça seu e-mail aqui para localizarmos seu acesso'>
-              </Input.Field>
-              {/* {errors.access && <Input.Message text={errors.access} />} */}
-            </Input.Root>
-            <div className="">
-              <a href="/" className='text-primary-500 hover:text-primary-600 hover:underline transition'>Lembrou? Que tal fazer login agora?</a>
-            </div>
-            <Button.Root>
-              <Button.Text>Entrar</Button.Text>
-              {/* {loading && <Button.Loading />} */}
+                placeholder="Insira seu e-mail aqui"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </Input.Root>)}
+
+            {/* RESET CODE + PASSWORD */}
+            {step === 'reset' && (
+              <>
+                <Input.Root>
+                  <Input.Field
+                    name="code"
+                    placeholder="Insira aqui o código fornecido"
+                    value={code}
+                    onChange={(e) => setCode(e.target.value)}
+                  />
+                </Input.Root>
+
+                <Input.Root>
+                  <Input.Label text="Nova senha" />
+                  <Input.Field
+                    type="password"
+                    placeholder="Digite sua nova senha"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                </Input.Root>
+              </>
+            )}
+
+            {/* LINK */}
+            <div>
+              <Link to="/" className="text-primary-600 hover:text-primary-700 hover:underline transition">
+                Quer fazer login agora?
+              </Link>
+            </div>  
+
+            {/* BOTÃO */}
+            <Button.Root onClick={handleSubmit}>
+              {loading && <Button.Loading />}
+              <Button.Text>{step === 'recover' ? 'Solicitar' : 'Redefinir senha'}</Button.Text>
             </Button.Root>
-            {/* {error &&
-              <div className="absolute w-full top-full mt-3 p-2 py-3 border-l-2 border-red-500">
-                <p className='text-sm text-red-700'>{error}</p>
-              </div>} */}
+
+            {step === 'reset' && (
+              <button
+                disabled={loading}
+                onClick={() => handleResendCode(email)}
+                className="text-primary-600 hover:text-primary-700 font-medium hover:underline transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Não recebi o código
+              </button>
+            )}
+
+            {/* ERRO */}
+            {error && (
+              <Flash.Root className='absolute top-full mt-3' variant="error">
+                <Flash.Text textElement={<p>{error}</p>} />
+              </Flash.Root>
+            )}
           </div>
         </div>
       </div>

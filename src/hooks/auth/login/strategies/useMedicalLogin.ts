@@ -24,7 +24,12 @@ export function useMedicalLogin() {
       return true;
 
     } catch (err: any) {
-      setError(err.message ?? 'Erro desconhecido no login médico.');
+      // Tratar erro de falha na conexão
+      if (err instanceof TypeError && err.message === 'Failed to fetch') {
+        setError('Ops, não conseguimos conexão com o servidor. Verifique sua internet ou tente novamente mais tarde.');
+      } else {
+        setError(err.message ?? 'Erro desconhecido no login médico.');
+      }
       return false;
     } finally {
       setLoading(false);

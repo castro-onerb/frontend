@@ -1,12 +1,13 @@
 import Logo from '@/assets/img/business/logo-horizontal-color.svg';
 import { Button } from '@/components/Button/Button';
+import { Flash } from '@/components/flashMessage/Flash';
 import { Hero } from '@/components/Hero/Hero';
 import { Input } from '@/components/Input/Input'
-import { useLogin } from '@/hooks/useLogin';
+import { useLogin } from '@/hooks/auth/login/useLogin';
 import { useViewport } from '@/utils/ViewportBool';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function Login () {
 
@@ -15,6 +16,8 @@ export default function Login () {
   const [togglePassword, setTogglePassword] = useState<'password' | 'text'>('password');
   const [selectedType, setSelectedType] = useState('');
   const [errors, setErrors] = useState<{ access?: string; password?: string }>({});
+  const [loginError, setLoginError] = useState<string | null>(null);
+
   const navigate = useNavigate();
 
   const { viewer } = useViewport(920);
@@ -48,6 +51,10 @@ export default function Login () {
     const success = await login(isCrm ? `${access}-${selectedType}` : access, password);
     if (success) {
       navigate('/home');
+    }
+
+    if (error) {
+      setLoginError(error);
     }
   };
 
@@ -114,16 +121,16 @@ export default function Login () {
               {errors.password && <Input.Message text={errors.password} />}
             </Input.Root>
             <div className="">
-              <a href="/recouver" className='text-primary-500 hover:text-primary-600 hover:underline transition'>Esqueceu sua senha?</a>
+              <Link to="/recover" className='text-primary-500 hover:text-primary-600 hover:underline transition'>Esqueceu sua senha?</Link>
             </div>
             <Button.Root onClick={prepareLogin}>
-              <Button.Text>{loading ? 'Entrando...' : 'Entrar'}</Button.Text>
               {loading && <Button.Loading />}
+              <Button.Text>{loading ? 'Entrando...' : 'Entrar'}</Button.Text>
             </Button.Root>
-            {error &&
-              <div className="absolute w-full top-full mt-3 p-2 py-3 border-l-2 border-red-500">
-                <p className='text-sm text-red-700'>{error}</p>
-              </div>}
+            {loginError &&
+              <Flash.Root onClose={() => setLoginError(null)} className='absolute top-full mt-3' variant="error">
+                <Flash.Text textElement={<p>{error}</p>} />
+              </Flash.Root>}
           </div>
         </div>
         <div className="p-5"></div>
