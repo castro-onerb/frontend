@@ -1,4 +1,4 @@
-export const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3333';
+export const API_BASE_URL = import.meta.env.VITE_BACKEND_BASE_URL || 'http://192.168.2.174:3333';
 
 function getAccessToken(): string | null {
   return localStorage.getItem('access_token');

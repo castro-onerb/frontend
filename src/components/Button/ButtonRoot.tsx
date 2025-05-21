@@ -1,16 +1,16 @@
-import type { ReactNode } from "react";
+import type { ReactNode, ButtonHTMLAttributes } from "react";
 
-interface IButtonRootProps {
+interface IButtonRootProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children?: ReactNode;
-  onClick?: () => void;
 }
 
-export function ButtonRoot({ children, onClick }: IButtonRootProps) {
+export function ButtonRoot({ children, ...props }: IButtonRootProps) {
   return (
-    <div
-      onClick={onClick}
-      className="relative overflow-hidden flex gap-2 items-center justify-center p-4 bg-primary-500 hover:bg-primary-600 rounded-lg font-medium text-white cursor-pointer transition">
+    <button
+      {...props}
+      className="relative overflow-hidden flex gap-2 items-center justify-center p-4 bg-primary-500 hover:bg-primary-600 rounded-lg font-medium text-white cursor-pointer transition"
+    >
       {children}
-    </div>
+    </button>
   );
 }

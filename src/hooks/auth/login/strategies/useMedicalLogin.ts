@@ -23,14 +23,13 @@ export function useMedicalLogin() {
       localStorage.setItem('access_token', data.access_token);
       return true;
 
-    } catch (err: any) {
-      // Tratar erro de falha na conexão
-      if (err instanceof TypeError && err.message === 'Failed to fetch') {
-        setError('Ops, não conseguimos conexão com o servidor. Verifique sua internet ou tente novamente mais tarde.');
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
       } else {
-        setError(err.message ?? 'Erro desconhecido no login médico.');
+        setError('Erro desconhecido no login do médico.');
       }
-      return false;
+  return false;
     } finally {
       setLoading(false);
     }

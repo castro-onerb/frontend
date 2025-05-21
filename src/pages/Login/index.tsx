@@ -39,16 +39,21 @@ export default function Login () {
   const isCrm = /^[0-9]/.test(access);
   const { login, loading, error } = useLogin(isCrm ? 'medical' : 'operator');
 
-  const prepareLogin = async () => {
+
+  const prepareLogin = async (e?: React.FormEvent<HTMLFormElement>) => {
+    if (e) e.preventDefault(); // previne reload da página no submit
+    
     const newErrors: typeof errors = {};
 
     if (!access.trim()) newErrors.access = 'É necessário informar um acesso';
     if (!password.trim()) newErrors.password = 'Por favor, preencha sua senha';
-    if (isCrm && !selectedType) newErrors.access = 'É necessário informar o UF do CRM';
+    if (isCrm && !selectedType) newErrors.access = 'É necessário informar a UF do CRM';
 
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) return;
+    
     const success = await login(isCrm ? `${access}-${selectedType}` : access, password);
+    
     if (success) {
       navigate('/home');
     }
@@ -59,7 +64,7 @@ export default function Login () {
   };
 
   return (
-    <div className="flex items-stretch h-screen bg-primary-50">
+    <div className="flex items-stretch h-dvh bg-primary-50">
       {!viewer[0] && (
       <Hero.Root>
         <Hero.Card className='bg-primary-600'></Hero.Card>
@@ -69,7 +74,10 @@ export default function Login () {
       )}
       <div className="relative flex-1 p-3 bg-primary-50 flex flex-col items-center justify-between">
         <div className="p-5"></div>
-        <div className="relative px-4 md:p-0 flex flex-col gap-10 sm:gap-8 w-full sm:max-h-dvh max-w-[369px]">
+        <form
+          onSubmit={prepareLogin}
+          className="relative px-4 md:p-0 flex flex-col gap-10 sm:gap-8 w-full sm:max-h-dvh max-w-[369px]"
+        >
           <div
             className='flex'>
             <img
@@ -123,7 +131,7 @@ export default function Login () {
             <div className="">
               <Link to="/recover" className='text-primary-500 hover:text-primary-600 hover:underline transition'>Esqueceu sua senha?</Link>
             </div>
-            <Button.Root onClick={prepareLogin}>
+            <Button.Root type="submit">
               {loading && <Button.Loading />}
               <Button.Text>{loading ? 'Entrando...' : 'Entrar'}</Button.Text>
             </Button.Root>
@@ -132,7 +140,7 @@ export default function Login () {
                 <Flash.Text textElement={<p>{error}</p>} />
               </Flash.Root>}
           </div>
-        </div>
+        </form>
         <div className="p-5"></div>
       </div>
     </div>

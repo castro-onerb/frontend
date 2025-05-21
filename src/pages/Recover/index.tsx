@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { useRecover } from '@/hooks/auth/recover/useRecover';
 import { useState } from 'react';
 import { Flash } from '@/components/flashMessage/Flash';
+import { useViewport } from '@/utils/ViewportBool';
 
 export default function Recouver() {
 
@@ -14,6 +15,8 @@ export default function Recouver() {
   const [email, setEmail] = useState('');
   const [code, setCode] = useState('');
   const [password, setPassword] = useState('');
+
+  const { viewer } = useViewport(920);
 
   const handleSubmit = async () => {
     if (step === 'recover') {
@@ -24,10 +27,12 @@ export default function Recouver() {
   };
 
   return (
-    <div className="flex items-stretch h-screen bg-primary-50">
+    <div className="flex items-stretch h-dvh bg-primary-50">
+      {!viewer[0] && (
       <Hero.Root>
         <Hero.Card className="bg-primary-600" />
       </Hero.Root>
+      )}
       <div className="relative flex-1 p-3 bg-primary-50 flex flex-col items-center justify-center">
         <div className="relative px-4 md:p-0 flex flex-col gap-10 sm:gap-8 w-full sm:max-h-dvh max-w-[369px]">
           <div className="flex">
@@ -49,12 +54,7 @@ export default function Recouver() {
             {step === 'reset' && (
               <>
                 <Input.Root>
-                  <Input.Field
-                    name="code"
-                    placeholder="Insira aqui o código fornecido"
-                    value={code}
-                    onChange={(e) => setCode(e.target.value)}
-                  />
+                  <Input.Codes length={6} onChange={(val) => setCode(val)} />
                 </Input.Root>
 
                 <Input.Root>

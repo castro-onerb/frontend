@@ -40,7 +40,7 @@ export default function DisableCodes() {
   }, [email]);
 
   return (
-    <div className="flex items-stretch h-screen bg-primary-50">
+    <div className="flex items-stretch h-dvh bg-primary-50">
       {loading && (
       <div className="fixed inset-0 bg-black/60 flex items-center justify-center">
         <Icon icon={`mingcute:loading-3-fill`} className="animate-spin" style={{ fontSize: 60, color: 'FFFFFF' }} />
