@@ -5,9 +5,17 @@ export interface CodeInputProps {
   length?: number;
   onChange?: (value: string) => void;
   autoFocus?: boolean;
+  autoComplete?: string;
+  name?: string;
 }
 
-export function CodeInputGroup({ length = 6, onChange, autoFocus }: CodeInputProps) {
+export function CodeInputGroup({
+  length = 6,
+  onChange,
+  autoFocus,
+  autoComplete = "off",
+  name = "code",
+}: CodeInputProps) {
   const [values, setValues] = useState<string[]>(Array(length).fill(''));
   const inputsRef = useRef<(HTMLInputElement | null)[]>([]);
 
@@ -39,7 +47,10 @@ export function CodeInputGroup({ length = 6, onChange, autoFocus }: CodeInputPro
           value={val}
           onChange={(e) => handleChange(i, e.target.value)}
           onKeyDown={(e) => handleKeyDown(i, e)}
+          name={`${name}[${i}]`} // nome individual para cada input
           autoFocus={autoFocus && i === 0}
+          autoComplete={autoComplete}
+          inputMode="text"
         />
       ))}
     </div>

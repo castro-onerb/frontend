@@ -1,15 +1,12 @@
-import { Navigate, type RouteProps } from "react-router-dom";
+import { Navigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthProvider';
 
-interface ProtectedRouteProps extends Omit<RouteProps, 'element'> {
-  children: React.ReactNode;
-}
+const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { isAuthenticated } = useAuth();
 
-const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
-  const isAuthenticated = Boolean(localStorage.getItem("access_token"));
+  if (isAuthenticated === null) return <div>Carregando autenticação...</div>;
 
-  if (!isAuthenticated) {
-    return <Navigate to="/" replace />;
-  }
+  if (!isAuthenticated) return <Navigate to="/" replace />;
 
   return <>{children}</>;
 };

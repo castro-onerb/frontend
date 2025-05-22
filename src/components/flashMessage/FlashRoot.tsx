@@ -26,7 +26,7 @@ export function FlashRoot({
   const variantClass = variantClasses[variant];
 
   return (
-    <div className={`w-full flex my-2 p-2 py-4 border-l-2 text-sm ${variantClass} ${className}`}>
+    <div className={`w-full flex justify-between my-2 p-2 py-4 border-l-2 text-sm ${variantClass} ${className}`}>
       {children}
       {onClose && (
         <span onClick={onClose} className="h-fit p-1 cursor-pointer"><Icon icon={`mingcute:close-fill`} /></span>

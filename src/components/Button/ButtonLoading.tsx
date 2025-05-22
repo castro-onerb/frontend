@@ -7,7 +7,7 @@ export function ButtonLoading() {
       <Icon
         icon={`mingcute:loading-3-fill`}
         className="animate-spin"
-        style={{ fontSize: 24 }} />
+        style={{ fontSize: 16 }} />
     </>
   );
 }

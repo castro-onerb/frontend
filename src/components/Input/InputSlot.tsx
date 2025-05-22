@@ -7,7 +7,7 @@ interface InputSlotProps {
 export function InputSlot({ children }: InputSlotProps) {
 
   return (
-    <div className={`relative flex items-center`}>
+    <div className={`relative flex items-stretch h-full`}>
       {children}
     </div>
   );

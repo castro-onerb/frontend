@@ -40,10 +40,10 @@ export function InputSelectTrigger({ placeholder = "Selecione", value, onChange,
     <SelectContext.Provider value={{ openBox, setOpenBox, selected: value, setSelected: onChange }}>
       <div
         onClick={() => setOpenBox(!openBox)}
-        className={`relative px-2 py-1 rounded-md hover:bg-zinc-100 cursor-pointer transition ${openBox && "bg-zinc-100"}`}>
-        <span className="select-none text-zinc-800 flex gap-1 items-center">
+        className={`relative flex items-center px-2 py-1 rounded-r-lg bg-primary-500 hover:bg-primary-600 cursor-pointer transition ${openBox && "bg-primary-600"}`}>
+        <span className="select-none text-white flex gap-2 items-center">
           {value || placeholder}
-          <Icon icon={`icon-park-solid:down-one`} />
+          <Icon icon={`picon:down`} />
         </span>
       </div>
       {children}

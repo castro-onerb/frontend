@@ -3,12 +3,12 @@ import { useState } from "react";
 
 export function useRecover() {
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [metadata, setMetadata] = useState<{ message: string, success: boolean } | null>(null);
   const [step, setStep] = useState<'recover' | 'reset' | 'done'>('recover');
 
   async function handleRecover(email: string) {
     setLoading(true);
-    setError(null);
+    setMetadata(null);
 
     try {
       const response = await fetch(`${API_BASE_URL}/auth/recovery`, {
@@ -19,14 +19,19 @@ export function useRecover() {
         body: JSON.stringify({ email })
       });
 
+      const data = await response.json();
       if (!response.ok) {
-        const data = await response.json();
         throw new Error(data.message || 'Erro ao solicitar recuperação');
       }
 
+      setMetadata({ success: data.success, message: data.message });
       setStep('reset');
     } catch (err: any) {
-      setError(err.message || 'Erro ao solicitar recuperação');
+      if (err instanceof TypeError && err.message === 'Failed to fetch') {
+        setMetadata({ success: false, message: 'Sem conexão com o servidor. Confira sua internet ou tente mais tarde.' });
+      } else {
+        setMetadata({ success: false, message: err.message || 'Erro ao solicitar recuperação' });
+      }
     } finally {
       setLoading(false);
     }
@@ -34,7 +39,7 @@ export function useRecover() {
 
   async function handleReset(email: string, code: string, password: string) {
     setLoading(true);
-    setError(null);
+    setMetadata(null);
 
     try {
       const response = await fetch(`${API_BASE_URL}/auth/reset`, {
@@ -45,14 +50,19 @@ export function useRecover() {
         body: JSON.stringify({ email, code, password })
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
-        const data = await response.json();
         throw new Error(data.message || 'Erro ao redefinir senha');
       }
 
       setStep('done');
     } catch (err: any) {
-      setError(err.message || 'Erro ao redefinir senha');
+      if (err instanceof TypeError && err.message === 'Failed to fetch') {
+        setMetadata({ success: false, message: 'Sem conexão com o servidor. Confira sua internet ou tente mais tarde.' });
+      } else {
+        setMetadata({ success: false, message: err.message || 'Erro ao redefinir senha'});
+      }
     } finally {
       setLoading(false);
     }
@@ -65,7 +75,8 @@ export function useRecover() {
 
   return {
     loading,
-    error,
+    metadata,
+    setMetadata,
     step,
     handleRecover,
     handleReset,

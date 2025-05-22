@@ -11,13 +11,13 @@ interface IFieldProps extends InputHTMLAttributes<HTMLInputElement> {
 export function InputField({ placeholder, children, value, onChange, ...props }: IFieldProps) {
   return (
     <div
-      className="relative flex items-center px-2 gap-2 border border-slate-400 rounded-lg transition">
+      className="relative flex items-center gap-2 border border-slate-200 focus-within:border-primary-500 rounded-lg transition">
       <input
         type="text"
         placeholder={placeholder}
         value={value}
         onChange={onChange}
-        className="flex-1 py-4 outline-none"
+        className="text-base leading-none flex-1 p-2.5 outline-none"
         {...props}
         />
       {children}

@@ -6,6 +6,6 @@ interface IButtonTextProps {
 
 export function ButtonText({ children }: IButtonTextProps) {
   return (
-    <span className="z-1">{children}</span>
+    <span className="z-1 font-semibold leading-none">{children}</span>
   )
 }
