@@ -11,7 +11,7 @@ export function useRecover() {
     setMetadata(null);
 
     try {
-      const response = await fetch(`${API_BASE_URL}/auth/recovery`, {
+      const response = await fetch(`${API_BASE_URL}/auth/recover-password`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -42,7 +42,7 @@ export function useRecover() {
     setMetadata(null);
 
     try {
-      const response = await fetch(`${API_BASE_URL}/auth/reset`, {
+      const response = await fetch(`${API_BASE_URL}/auth/reset-password`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

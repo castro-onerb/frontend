@@ -11,7 +11,7 @@ export function useOperatorLogin() {
     setError(null);
 
     try {
-      const response = await fetchWithMiddleware(`${BACKEND_BASE_URL}/auth/operator`, {
+      const response = await fetchWithMiddleware(`${BACKEND_BASE_URL}/auth/login/operator`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password })

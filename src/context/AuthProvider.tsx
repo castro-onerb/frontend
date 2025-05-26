@@ -1,5 +1,5 @@
 import { API_BASE_URL, fetchWithAuth } from '@/api/fetchWithAuth';
-import React, {
+import {
   createContext,
   useContext,
   useEffect,
@@ -8,17 +8,15 @@ import React, {
 } from 'react';
 
 interface AuthContextProps {
-  isAuthenticated: boolean | null; // null enquanto está carregando/verificando
+  isAuthenticated: boolean | null;
   setIsAuthenticated: (auth: boolean) => void;
 }
 
-// Cria o contexto
 const AuthContext = createContext<AuthContextProps>({
   isAuthenticated: null,
   setIsAuthenticated: () => {},
 });
 
-// Provider para envolver sua aplicação
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 
@@ -46,5 +44,4 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-// Hook customizado para acessar o contexto
 export const useAuth = () => useContext(AuthContext);

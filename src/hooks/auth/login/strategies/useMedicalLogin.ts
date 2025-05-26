@@ -11,7 +11,7 @@ export function useMedicalLogin() {
     setError(null);
 
     try {
-      const response = await fetchWithAuth(`${BACKEND_BASE_URL}/auth/medical`, {
+      const response = await fetchWithAuth(`${BACKEND_BASE_URL}/auth/login/medical`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ crm, password })

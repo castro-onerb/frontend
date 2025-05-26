@@ -1,4 +1,4 @@
-export const API_BASE_URL = import.meta.env.VITE_BACKEND_BASE_URL || 'http://192.168.2.174:3333';
+export const API_BASE_URL = import.meta.env.VITE_BACKEND_BASE_URL || 'http://localhost:3333';
 
 function getAccessToken(): string | null {
   return localStorage.getItem('access_token');
@@ -7,6 +7,11 @@ function getAccessToken(): string | null {
 function setAccessToken(token: string) {
   localStorage.setItem('access_token', token);
 }
+
+function removeAccessToken() {
+  localStorage.removeItem('access_token');
+}
+
 
 async function refreshAccessToken(): Promise<string | null> {
   try {
@@ -47,10 +52,11 @@ export async function fetchWithAuth(
   if (response.status === 401) {
     const newToken = await refreshAccessToken();
 
-    // if (!newToken) {
-    //   window.location.href = '/';
-    //   return Promise.reject('Refresh token inválido ou expirado');
-    // }
+    if (!newToken) {
+      removeAccessToken();
+      window.location.href = '/';
+      return Promise.reject('Refresh token inválido ou expirado');
+    }
 
     response = await fetch(input, {
       ...init,
