@@ -1,13 +1,21 @@
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
-import { API_BASE_URL } from '@/api/fetchWithAuth';
+import { useState, useContext } from 'react';
+import { AuthContext } from '@/auth/context/AuthProvider';
+import { API_BASE_URL } from '@/config/api';
 
-export function useLogout() {
+interface UseLogoutHook {
+  handleLogout: () => Promise<void>;
+  loading: boolean;
+  error: string | null;
+}
+
+export function useLogout(): UseLogoutHook {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
+  const { setIsAuthenticated } = useContext(AuthContext);
 
-  async function handleLogout() {
+  async function handleLogout(): Promise<void> {
     setLoading(true);
     setError(null);
 
@@ -18,17 +26,16 @@ export function useLogout() {
       });
 
       localStorage.removeItem('access_token');
+      window.dispatchEvent(new Event('auth-failed'));
+      setIsAuthenticated(false);
 
       if (!response.ok) {
         throw new Error('Erro ao encerrar sessão.');
       }
 
-      // Se você tiver um AuthContext, reseta ele aqui
-      // authContext.setUser(null);
-      
       navigate('/');
-    } catch (err: any) {
-      setError(err.message || 'Erro ao sair');
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Erro ao sair');
     } finally {
       setLoading(false);
     }

@@ -2,35 +2,110 @@
 
 @layer base {
 	@font-face {
-        font-family: 'Inter Tight';
-        font-style: normal;
-        font-weight: 400;
-        font-display: swap;
-        src: url('public/fonts/InterTight-Regular.ttf') format('truetype');
+		font-family: 'Inter Tight';
+		font-style: normal;
+		font-weight: 400;
+		font-display: swap;
+		src: url('public/fonts/InterTight-Regular.ttf') format('truetype');
 	}
 }
 @theme {
-    --font-sans: 'Inter Tight', ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-    --color-primary-50:  #E3F4F1;
-    --color-primary-100: #C6E7E2;
-    --color-primary-200: #9FD5CD;
-    --color-primary-300: #78B9B0;
-    --color-primary-400: #5AA29A;
-    --color-primary-500: #4E9E8F;
-    --color-primary-600: #3B7C70;
-    --color-primary-700: #2D6058;
-    --color-primary-800: #204640;
-    --color-primary-900: #16302C;
-    --color-primary-9000: #16302C;
+	--font-sans: 'Inter Tight', ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+	--color-primary-50 : #E0F7F6;
+	--color-primary-100: #B3ECEA;
+	--color-primary-200: #80E0DC;
+	--color-primary-300: #4DD3CE;
+	--color-primary-400: #26C6C0;
+	--color-primary-500: #13AFA6;
+	--color-primary-600: #109E96;
+	--color-primary-700: #0C7C75;
+	--color-primary-800: #095D58;
+	--color-primary-900: #063D3B;
 
-    --animate-load-mp: load-mp 3s linear forwards;
+	--color-fb-pink-50 : #f9e3f0;
+	--color-fb-pink-100: #eeb8d9;
+	--color-fb-pink-200: #e387c1;
+	--color-fb-pink-300: #d452a9;
+	--color-fb-pink-400: #c91b98;
+	--color-fb-pink-500: #bc0088;
+	--color-fb-pink-600: #af0084;
+	--color-fb-pink-700: #9e007f;
+	--color-fb-pink-800: #8e0079;
+	--color-fb-pink-900: #72006f;
 
-    @keyframes load-mp {
-        0% {
-            width: 0;
-        }
-        100% {
-            width: 300%;
-        }
-    }
+	--color-fb-lilac-50 : #eee7f7;
+	--color-fb-lilac-100: #d3c3ec;
+	--color-fb-lilac-200: #b79cdf;
+	--color-fb-lilac-300: #9a73d3;
+	--color-fb-lilac-400: #8453c9;
+	--color-fb-lilac-500: #6e34be;
+	--color-fb-lilac-600: #652fb9;
+	--color-fb-lilac-700: #5727b0;
+	--color-fb-lilac-800: #4b20a9;
+	--color-fb-lilac-900: #36129c;
+
+	--color-fb-green-50 : #e7f6e5;
+	--color-fb-green-100: #c5e8be;
+	--color-fb-green-200: #9ed994;
+	--color-fb-green-300: #74ca67;
+	--color-fb-green-400: #51bf43;
+	--color-fb-green-500: #27b312;
+	--color-fb-green-600: #18a403;
+	--color-fb-green-700: #009200;
+	--color-fb-green-800: #008100;
+	--color-fb-green-900: #006200;
+	
+	--color-fb-lemon-50 : #e7f6e5;
+	--color-fb-lemon-100: #c5e8be;
+	--color-fb-lemon-200: #9ed994;
+	--color-fb-lemon-300: #74ca67;
+	--color-fb-lemon-400: #51bf43;
+	--color-fb-lemon-500: #27b312;
+	--color-fb-lemon-600: #18a403;
+	--color-fb-lemon-700: #009200;
+	--color-fb-lemon-800: #008100;
+	--color-fb-lemon-900: #006200;
+
+	--color-fb-red-50 : #ffeaed;
+	--color-fb-red-100: #ffcbcf;
+	--color-fb-red-200: #f29795;
+	--color-fb-red-300: #e96f6b;
+	--color-fb-red-400: #f24d45;
+	--color-fb-red-500: #f63b28;
+	--color-fb-red-600: #e83028;
+	--color-fb-red-700: #d62422;
+	--color-fb-red-800: #c91b1b;
+	--color-fb-red-900: #ba050c;
+
+	--color-fb-grey-100: #f5f5f5;
+	--color-fb-grey-200: #eee;
+	--color-fb-grey-300: #e0e0e0;
+	--color-fb-grey-400: #bdbdbd;
+	--color-fb-grey-500: #9e9e9e;
+	--color-fb-grey-600: #757575;
+	--color-fb-grey-700: #616161;
+	--color-fb-grey-800: #424242;
+	--color-fb-grey-900: #212121;
+
+	--color-fb-slate-50 : #eceff1;
+	--color-fb-slate-100: #cfd8dc;
+	--color-fb-slate-200: #b0bec5;
+	--color-fb-slate-300: #90a4ae;
+	--color-fb-slate-400: #78909c;
+	--color-fb-slate-500: #607d8b;
+	--color-fb-slate-600: #546e7a;
+	--color-fb-slate-700: #455a64;
+	--color-fb-slate-800: #37474f;
+	--color-fb-slate-900: #263238;
+
+	--animate-load-mp: load-mp 3s linear forwards;
+
+	@keyframes load-mp {
+		0% {
+			width: 0;
+		}
+		100% {
+			width: 300%;
+		}
+	}
 }

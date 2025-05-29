@@ -1,27 +1,27 @@
-import LogoSymbol from "@/assets/img/business/logo-symbol-color.svg";
-import { Hero } from "@/components/Hero/Hero";
-import { Button } from "@/components/Button/Button";
-import { Input } from "@/components/Input/Input"
-import { Link, useNavigate } from "react-router-dom";
-import { useRecover } from "@/hooks/auth/recover/useRecover";
-import { useState } from "react";
-import { Flash } from "@/components/flashMessage/Flash";
-import { Container } from "@/components/ContainerForm/Container";
-import { Icon } from "@iconify/react/dist/iconify.js";
-import { usePassword } from "@/hooks/auth/validations/usePassword";
+import LogoSymbol from '@/assets/img/business/logo-symbol-color.svg';
+import { Hero } from '@/components/Hero/Hero';
+import { Button } from '@/components/Button/Button';
+import { Input } from '@/components/Input/Input';
+import { Link, useNavigate } from 'react-router-dom';
+import { useRecover } from '@/hooks/auth/recover/useRecover';
+import { useState } from 'react';
+import { Flash } from '@/components/flashMessage/Flash';
+import { Container } from '@/components/ContainerForm/Container';
+import { Icon } from '@iconify/react/dist/iconify.js';
+import { usePassword } from '@/hooks/auth/validations/usePassword';
 
 export default function Recover() {
 
   const navigate = useNavigate();
   const { step, metadata, setMetadata, loading, handleRecover, handleReset, handleResendCode } = useRecover();
 
-  const [togglePassword, setTogglePassword] = useState<"password" | 'text'>('password');
+  const [togglePassword, setTogglePassword] = useState<'password' | 'text'>('password');
   const [errors, setErrors] = useState<{ email?: string; code?: string; password?: string, confirmPassword?: string }>({});
 
-  const [email, setEmail] = useState("");
-  const [code, setCode] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [code, setCode] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const { validate, errors: passwordErrors } = usePassword();
 
   const handleSubmit = async (e?: React.FormEvent<HTMLFormElement>) => {
@@ -33,13 +33,11 @@ export default function Recover() {
       newErrors.email = 'Informe seu e-mail';
     }
 
-    if (step === "reset") {
+    if (step === 'reset') {
       if (!code.trim()) {
         newErrors.code = 'Informe o código recebido';
       }
       const isValid = validate(password);
-
-      console.log(isValid);
       if (!isValid) {
         setErrors({ ...errors, ...passwordErrors });
         return;
@@ -59,13 +57,13 @@ export default function Recover() {
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) return;
 
-    if (step === "recover") {
+    if (step === 'recover') {
       await handleRecover(email);
-    } else if (step === "reset") {
+    } else if (step === 'reset') {
       await handleReset(email, code, password);
     }
 
-    if (step === "done") {
+    if (step === 'done') {
       navigate('/');
     }
   };
@@ -81,7 +79,7 @@ export default function Recover() {
             <img src={LogoSymbol} />
           </div>
           <form
-            onSubmit={handleSubmit}
+            onSubmit={(e) => void handleSubmit(e)}
             className="relative px-4 md:p-0 flex flex-col gap-6 w-full max-w-[440px] mx-auto"
           >
           <div
@@ -101,7 +99,7 @@ export default function Recover() {
               <Flash.Text textElement={<p>{metadata.message}</p>} />
             </Flash.Root>
           )}
-          {step !== "reset" && (<Input.Root>
+          {step !== 'reset' && (<Input.Root>
             <Input.Label text="E-mail de recuperação" />
             <Input.Field
               name="email"
@@ -111,7 +109,7 @@ export default function Recover() {
             />
             {errors.email && <Input.Message text={errors.email} />}
           </Input.Root>)}
-          {step === "reset" && (
+          {step === 'reset' && (
             <>
               <Input.Root>
                 <Input.Codes
@@ -124,7 +122,7 @@ export default function Recover() {
               </Input.Root>
               <button
                 disabled={loading}
-                onClick={() => handleResendCode(email)}
+                onClick={() => void handleResendCode(email)}
                 className="text-primary-600 hover:text-primary-700 font-medium hover:underline transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Não recebi o código
@@ -140,9 +138,9 @@ export default function Recover() {
                   onChange={(e) => setPassword(e.target.value)}
                 >
                 <div
-                  onClick={() => setTogglePassword(prev => prev === "password" ? "text" : "password")}
+                  onClick={() => setTogglePassword(prev => prev === 'password' ? 'text' : 'password')}
                   className="mr-1 p-2 rounded-md bg-primary-500 hover:bg-primary-600 cursor-pointer transition">
-                  <Icon className="text-white" style={{ fontSize: 18 }} icon={togglePassword === "password" ? "tabler:eye-off" : "tabler:eye"} /></div>
+                  <Icon className="text-white" style={{ fontSize: 18 }} icon={togglePassword === 'password' ? 'tabler:eye-off' : 'tabler:eye'} /></div>
                 </Input.Field>
                 {errors.password && <Input.Message text={errors.password} />}
               </Input.Root>
@@ -156,9 +154,9 @@ export default function Recover() {
                   onChange={(e) => setConfirmPassword(e.target.value)}
                 >
                 <div
-                  onClick={() => setTogglePassword(prev => prev === "password" ? "text" : "password")}
+                  onClick={() => setTogglePassword(prev => prev === 'password' ? 'text' : 'password')}
                   className="mr-1 p-2 rounded-md bg-primary-500 hover:bg-primary-600 cursor-pointer transition">
-                  <Icon className="text-white" style={{ fontSize: 18 }} icon={togglePassword === "password" ? "tabler:eye-off" : "tabler:eye"} /></div>
+                  <Icon className="text-white" style={{ fontSize: 18 }} icon={togglePassword === 'password' ? 'tabler:eye-off' : 'tabler:eye'} /></div>
                 </Input.Field>
                 {errors.confirmPassword && <Input.Message text={errors.confirmPassword} />}
               </Input.Root>
@@ -171,9 +169,9 @@ export default function Recover() {
             <Link to="/" className="text-primary-600 hover:text-primary-700 hover:underline transition">
               Quer fazer login agora?
             </Link>
-            <Button.Root type="submit" className="w-auto md:flex-none">
+            <Button.Root type="submit" className="flex-1 md:flex-none">
               {loading && <Button.Loading />}
-              <Button.Text>{step === "recover" ? "Solicitar" : "Redefinir senha"}</Button.Text>
+              <Button.Text>{step === 'recover' ? 'Solicitar' : 'Redefinir senha'}</Button.Text>
             </Button.Root>
           </div>
           
@@ -182,5 +180,5 @@ export default function Recover() {
         </div>
       </Container.Root>
     </div>
-  )
+  );
 }

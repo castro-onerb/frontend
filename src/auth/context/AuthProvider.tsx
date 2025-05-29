@@ -1,18 +1,21 @@
-import { API_BASE_URL, fetchWithAuth } from '@/api/fetchWithAuth';
+// src/auth/context/AuthProvider.tsx
+import { fetchWithAuth } from '@/api/fetchWithAuth';
+import { API_BASE_URL } from '@/config/api';
 import {
   createContext,
-  useContext,
   useEffect,
   useState,
   type ReactNode,
+  type Dispatch,
+  type SetStateAction,
 } from 'react';
 
 interface AuthContextProps {
   isAuthenticated: boolean | null;
-  setIsAuthenticated: (auth: boolean) => void;
+  setIsAuthenticated: Dispatch<SetStateAction<boolean | null>>;
 }
 
-const AuthContext = createContext<AuthContextProps>({
+export const AuthContext = createContext<AuthContextProps>({
   isAuthenticated: null,
   setIsAuthenticated: () => {},
 });
@@ -21,14 +24,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 
   useEffect(() => {
+    console.log('auth efect');
     const checkAuth = async () => {
       try {
-        const res = await fetchWithAuth(`${API_BASE_URL}`);
-        if (res.ok) {
-          setIsAuthenticated(true);
-        } else {
-          setIsAuthenticated(false);
-        }
+        const res = await fetchWithAuth(`${API_BASE_URL}/auth/profile`);
+        console.log('auth response', res);
+        setIsAuthenticated(res.ok);
       } catch {
         setIsAuthenticated(false);
       }
@@ -43,5 +44,3 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     </AuthContext.Provider>
   );
 };
-
-export const useAuth = () => useContext(AuthContext);

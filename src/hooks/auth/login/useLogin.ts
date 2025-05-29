@@ -3,7 +3,13 @@ import { useOperatorLogin } from './strategies/useOperatorLogin';
 
 type LoginType = 'medical' | 'operator';
 
-export function useLogin(type: LoginType) {
+interface LoginHook {
+  login: (...args: any[]) => Promise<boolean>;
+  loading: boolean;
+  error: string | null;
+}
+
+export function useLogin(type: LoginType): LoginHook {
   const medical = useMedicalLogin();
   const operator = useOperatorLogin();
 
@@ -20,7 +26,5 @@ export function useLogin(type: LoginType) {
         loading: operator.loading,
         error: operator.error
       };
-    default:
-      throw new Error(`Tipo de login não suportado: ${type}`);
   }
 }

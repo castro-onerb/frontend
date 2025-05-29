@@ -1,35 +1,62 @@
 import { fetchWithAuth } from '@/api/fetchWithAuth';
-import { BACKEND_BASE_URL } from '@/config/api'
-import { useState } from "react";
+import { API_BASE_URL } from '@/config/api';
+import { useState } from 'react';
+import { z } from 'zod';
 
-export function useMedicalLogin() {
+interface MedicalLoginHook {
+  login: (crm: string, password: string) => Promise<boolean>;
+  loading: boolean;
+  error: string | null;
+}
+
+// Schema + Tipagem
+const AuthResponseSchema = z.object({
+  access_token: z.string(),
+});
+type AuthResponse = z.infer<typeof AuthResponseSchema>;
+
+const ErrorResponseSchema = z.object({
+  message: z.string(),
+});
+
+export function useMedicalLogin(): MedicalLoginHook {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  async function login(crm: string, password: string) {
+  async function login(crm: string, password: string): Promise<boolean> {
     setLoading(true);
     setError(null);
 
     try {
-      const response = await fetchWithAuth(`${BACKEND_BASE_URL}/auth/login/medical`, {
+      const response = await fetchWithAuth(`${API_BASE_URL}/auth/login/medical`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ crm, password })
+        body: JSON.stringify({ crm, password }),
       });
 
-      const data = await response.json();
+      const json: unknown = await response.json();
 
-      if (!response.ok) throw new Error(data.message ?? 'Erro no login médico.');
+      if (!response.ok) {
+        let message = 'Erro no login médico.';
+
+        try {
+          const parsed = ErrorResponseSchema.parse(json);
+          message = parsed.message;
+        } catch {
+          // Ignora erro de parse, mantém a mensagem padrão
+        }
+
+        throw new Error(message);
+      }
+
+      // Agora sim: validação e tipagem segura
+      const data: AuthResponse = AuthResponseSchema.parse(json);
       localStorage.setItem('access_token', data.access_token);
       return true;
 
     } catch (err: unknown) {
-      if (err instanceof Error) {
-        setError(err.message);
-      } else {
-        setError('Erro desconhecido no login do médico.');
-      }
-  return false;
+      setError(err instanceof Error ? err.message : 'Erro desconhecido no login do médico.');
+      return false;
     } finally {
       setLoading(false);
     }

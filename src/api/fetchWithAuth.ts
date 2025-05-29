@@ -1,4 +1,5 @@
-export const API_BASE_URL = import.meta.env.VITE_BACKEND_BASE_URL || 'http://localhost:3333';
+import { API_BASE_URL } from '@/config/api';
+import { z } from 'zod';
 
 function getAccessToken(): string | null {
   return localStorage.getItem('access_token');
@@ -12,6 +13,9 @@ function removeAccessToken() {
   localStorage.removeItem('access_token');
 }
 
+const RefreshResponseSchema = z.object({
+  access_token: z.string(),
+});
 
 async function refreshAccessToken(): Promise<string | null> {
   try {
@@ -22,14 +26,17 @@ async function refreshAccessToken(): Promise<string | null> {
 
     if (!res.ok) return null;
 
-    const data = await res.json();
-    if (data?.access_token) {
-      setAccessToken(data.access_token);
-      return data.access_token;
+    const json: unknown = await res.json();
+    const data = RefreshResponseSchema.parse(json);
+
+    setAccessToken(data.access_token);
+    return data.access_token;
+  } catch (err: unknown) {
+    if (err instanceof TypeError && err.message === 'Failed to fetch') {
+      window.dispatchEvent(new Event('connection-error'));
+      throw new Error('Sem conexão com o servidor. Confira sua internet ou tente mais tarde.');
     }
 
-    return null;
-  } catch {
     return null;
   }
 }
@@ -39,23 +46,32 @@ export async function fetchWithAuth(
   init: RequestInit = {}
 ): Promise<Response> {
   const accessToken = getAccessToken();
+  let response: Response;
 
-  let response = await fetch(input, {
-    ...init,
-    headers: {
-      ...init.headers,
-      Authorization: accessToken ? `Bearer ${accessToken}` : '',
-    },
-    credentials: 'include',
-  });
+  try {
+    response = await fetch(input, {
+      ...init,
+      headers: {
+        ...init.headers,
+        Authorization: accessToken ? `Bearer ${accessToken}` : '',
+      },
+      credentials: 'include',
+    });
+  } catch (err) {
+    if (err instanceof TypeError && err.message === 'Failed to fetch') {
+      window.dispatchEvent(new Event('connection-error'));
+      throw new Error('Sem conexão com o servidor. Confira sua internet ou tente mais tarde.');
+    }
+    throw err;
+  }
 
   if (response.status === 401) {
     const newToken = await refreshAccessToken();
 
     if (!newToken) {
       removeAccessToken();
-      window.location.href = '/';
-      return Promise.reject('Refresh token inválido ou expirado');
+      window.dispatchEvent(new Event('auth-failed'));
+      return Promise.reject(new Error('Refresh token inválido ou expirado'));
     }
 
     response = await fetch(input, {

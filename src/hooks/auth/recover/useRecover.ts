@@ -1,12 +1,38 @@
-import { API_BASE_URL } from "@/api/fetchWithAuth";
-import { useState } from "react";
+import { API_BASE_URL } from '@/config/api';
+import { useState } from 'react';
+import { z } from 'zod';
 
-export function useRecover() {
+const ErrorResponseSchema = z.object({
+  message: z.string(),
+});
+
+
+const RecoverResponseSchema = z.object({
+  message: z.string(),
+  success: z.boolean(),
+});
+
+type RecoverResponse = z.infer<typeof RecoverResponseSchema>;
+
+type RecoverStep = 'recover' | 'reset' | 'done';
+type Metadata = RecoverResponse | null;
+
+interface UseRecoverHook {
+  loading: boolean;
+  metadata: Metadata;
+  setMetadata: React.Dispatch<React.SetStateAction<Metadata>>;
+  step: RecoverStep;
+  handleRecover: (email: string) => Promise<void>;
+  handleReset: (email: string, code: string, password: string) => Promise<void>;
+  handleResendCode: (email: string) => Promise<void>;
+}
+
+export function useRecover(): UseRecoverHook {
   const [loading, setLoading] = useState(false);
-  const [metadata, setMetadata] = useState<{ message: string, success: boolean } | null>(null);
-  const [step, setStep] = useState<'recover' | 'reset' | 'done'>('recover');
+  const [metadata, setMetadata] = useState<Metadata>(null);
+  const [step, setStep] = useState<RecoverStep>('recover');
 
-  async function handleRecover(email: string) {
+  async function handleRecover(email: string): Promise<void> {
     setLoading(true);
     setMetadata(null);
 
@@ -19,17 +45,32 @@ export function useRecover() {
         body: JSON.stringify({ email })
       });
 
-      const data = await response.json();
+      const json: unknown = await response.json();
+
       if (!response.ok) {
-        throw new Error(data.message || 'Erro ao solicitar recuperação');
+        let errorMessage = 'Erro ao solicitar recuperação';
+
+        try {
+          const parsed = ErrorResponseSchema.parse(json);
+          errorMessage = parsed.message;
+        } catch {
+          // usa mensagem padrão
+        }
+
+        throw new Error(errorMessage);
       }
+
+      const data: RecoverResponse = RecoverResponseSchema.parse(json);
 
       setMetadata({ success: data.success, message: data.message });
       setStep('reset');
-    } catch (err: any) {
+    } catch (err: unknown) {
       if (err instanceof TypeError && err.message === 'Failed to fetch') {
-        setMetadata({ success: false, message: 'Sem conexão com o servidor. Confira sua internet ou tente mais tarde.' });
-      } else {
+        setMetadata({
+          success: false,
+          message: 'Sem conexão com o servidor. Confira sua internet ou tente mais tarde.'
+        });
+      } else if (err instanceof Error) {
         setMetadata({ success: false, message: err.message || 'Erro ao solicitar recuperação' });
       }
     } finally {
@@ -37,7 +78,7 @@ export function useRecover() {
     }
   }
 
-  async function handleReset(email: string, code: string, password: string) {
+  async function handleReset(email: string, code: string, password: string): Promise<void> {
     setLoading(true);
     setMetadata(null);
 
@@ -50,26 +91,38 @@ export function useRecover() {
         body: JSON.stringify({ email, code, password })
       });
 
-      const data = await response.json();
+      const json: unknown = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message || 'Erro ao redefinir senha');
+        let errorMessage = 'Erro ao solicitar recuperação';
+
+        try {
+          const parsed = ErrorResponseSchema.parse(json);
+          errorMessage = parsed.message;
+        } catch {
+          // usa mensagem padrão
+        }
+
+        throw new Error(errorMessage);
       }
 
+      // resposta ignorada por não ter utilidade
       setStep('done');
-    } catch (err: any) {
+    } catch (err: unknown) {
       if (err instanceof TypeError && err.message === 'Failed to fetch') {
-        setMetadata({ success: false, message: 'Sem conexão com o servidor. Confira sua internet ou tente mais tarde.' });
-      } else {
-        setMetadata({ success: false, message: err.message || 'Erro ao redefinir senha'});
+        setMetadata({
+          success: false,
+          message: 'Sem conexão com o servidor. Confira sua internet ou tente mais tarde.'
+        });
+      } else if (err instanceof Error) {
+        setMetadata({ success: false, message: err.message || 'Erro ao redefinir senha' });
       }
     } finally {
       setLoading(false);
     }
   }
 
-  async function handleResendCode(email: string) {
-    // Apenas reutiliza a lógica de handleRecover
+  async function handleResendCode(email: string): Promise<void> {
     await handleRecover(email);
   }
 
@@ -80,6 +133,6 @@ export function useRecover() {
     step,
     handleRecover,
     handleReset,
-    handleResendCode
+    handleResendCode,
   };
 }

@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { ReactNode } from 'react';
 
 interface IButtonTextProps {
   children: ReactNode;
@@ -6,6 +6,6 @@ interface IButtonTextProps {
 
 export function ButtonText({ children }: IButtonTextProps) {
   return (
-    <span className="z-1 font-semibold leading-none">{children}</span>
-  )
+    <span className="z-10 font-semibold leading-none">{children}</span>
+  );
 }

@@ -1,11 +1,11 @@
 import './css/Input.css';
-import { InputSlot } from "./InputSlot";
-import { InputField } from "./InputField";
-import { InputIcon } from "./InputIcon";
-import { InputLabel } from "./InputLabel";
-import { InputMessage } from "./InputMessage";
-import { InputRoot } from "./InputRoot";
-import { InputSelectBox, InputSelectItem, InputSelectTrigger } from "./InputSelectBox";
+import { InputSlot } from './InputSlot';
+import { InputField } from './InputField';
+import { InputIcon } from './InputIcon';
+import { InputLabel } from './InputLabel';
+import { InputMessage } from './InputMessage';
+import { InputRoot } from './InputRoot';
+import { InputSelectBox, InputSelectItem, InputSelectTrigger } from './InputSelectBox';
 import { CodeInputGroup } from './CodeInputGroup';
 
 export const Input = {
@@ -19,4 +19,4 @@ export const Input = {
   SelectTrigger: InputSelectTrigger,
   SelectBox: InputSelectBox,
   SelectItem: InputSelectItem
-}
+};
