@@ -23,12 +23,13 @@ export const AuthContext = createContext<AuthContextProps>({
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 
+  console.log('context', isAuthenticated);
+
   useEffect(() => {
     console.log('auth efect');
     const checkAuth = async () => {
       try {
         const res = await fetchWithAuth(`${API_BASE_URL}/auth/profile`);
-        console.log('auth response', res);
         setIsAuthenticated(res.ok);
       } catch {
         setIsAuthenticated(false);

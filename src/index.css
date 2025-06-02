@@ -1,4 +1,6 @@
-@import "tailwindcss";
+@import 'tailwindcss';
+@plugin 'tailwind-scrollbar';
+
 
 @layer base {
 	@font-face {
@@ -107,5 +109,48 @@
 		100% {
 			width: 300%;
 		}
+	}
+}
+
+
+@layer utilities {
+  .rbc-time-content::-webkit-scrollbar {
+    display: none;
+  }
+
+  .rbc-time-content {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .rbc-time-header.rbc-overflowing {
+    margin-right: 0px !important;
+  }
+
+	.rbc-allday-cell,
+  .rbc-allday-events,
+  .rbc-row-bg + .rbc-row-content {
+    display: none !important;
+    height: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+  }
+
+	.rbc-time-slot {
+		padding-inline: 10px;
+		display: flex;
+		height: 80px !important;
+		-webkit-box-flex: unset;
+		flex: none !important;
+	}
+
+	.rbc-header {
+		padding-block: 20px !important;
+	}
+
+	.rbc-current-time-indicator {
+		height: 3px !important;
+		border-radius: 100px;
+		background-color: #13AFA6 !important;
 	}
 }

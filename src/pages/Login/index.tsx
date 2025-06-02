@@ -7,7 +7,7 @@ import { Icon } from '@/components/Icon/Icon';
 import { Input } from '@/components/Input/Input';
 import { useLogin } from '@/hooks/auth/login/useLogin';
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, redirect } from 'react-router-dom';
 
 export default function Login () {
 
@@ -17,8 +17,6 @@ export default function Login () {
   const [selectedType, setSelectedType] = useState('');
   const [errors, setErrors] = useState<{ access?: string; password?: string }>({});
   const [loginError, setLoginError] = useState<string | null>(null);
-
-  const navigate = useNavigate();
 
   const ufs = [
     'AC', 'AL', 'AM', 'AP', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA',
@@ -53,7 +51,7 @@ export default function Login () {
     const success = await login(isCrm ? `${access}-${selectedType}` : access, password);
 
     if (success) {
-      navigate('/home');
+      redirect('/');
     }
 
     if (error) {

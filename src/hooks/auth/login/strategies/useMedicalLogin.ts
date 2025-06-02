@@ -1,4 +1,5 @@
 import { fetchWithAuth } from '@/api/fetchWithAuth';
+import { useAuthStatus } from '@/auth/hooks/useAuthStatus';
 import { API_BASE_URL } from '@/config/api';
 import { useState } from 'react';
 import { z } from 'zod';
@@ -22,6 +23,7 @@ const ErrorResponseSchema = z.object({
 export function useMedicalLogin(): MedicalLoginHook {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { setIsAuthenticated } = useAuthStatus();
 
   async function login(crm: string, password: string): Promise<boolean> {
     setLoading(true);
@@ -52,6 +54,7 @@ export function useMedicalLogin(): MedicalLoginHook {
       // Agora sim: validação e tipagem segura
       const data: AuthResponse = AuthResponseSchema.parse(json);
       localStorage.setItem('access_token', data.access_token);
+      setIsAuthenticated(true);
       return true;
 
     } catch (err: unknown) {

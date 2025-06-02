@@ -11,6 +11,7 @@ export function CalendarPill({ label, type }: CalendarPillProps) {
     [CardType.Purple]: 'bg-purple-700 text-white',
     [CardType.Pink]: 'bg-pink-700 text-white',
     [CardType.Emerald]: 'bg-emerald-700 text-white',
+    [CardType.Slate]: 'bg-slate-700 text-white',
   };
 
   const variantClass =

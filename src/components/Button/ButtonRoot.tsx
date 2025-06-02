@@ -130,7 +130,7 @@ export function ButtonRoot({
     <>
       {rippleSpan}
       {loading && <ButtonLoading />}
-      <span className="relative z-10 flex items-center gap-1">{children}</span>
+      <span className="relative z-1 flex items-center gap-1">{children}</span>
     </>
   );
 

@@ -9,7 +9,7 @@ export default function PrivateRoutes(): ReactElement {
   return (
     <Suspense fallback={<div>Carregando...</div>}>
       <Routes>
-        <Route path="/home" element={<Home />} />
+        <Route path="/" index element={<Home />} />
         <Route path="/invalidate-codes" element={<InvalidateCodes />} />
         <Route path="*" element={<Page404 />} />
       </Routes>

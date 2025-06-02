@@ -1,9 +1,9 @@
 import { CalendarPill } from './CalendarPill';
-import { CalendarHeader } from './Layout/CalendarHeader';
-import { CalendarRoot } from './Layout/CalendarRoot';
+import { CalendarCard } from './Card/CardRoot';
+import { CalendarRoot } from './layout/CalendarRoot';
 
 export const Calendar = {
   Root: CalendarRoot,
-  Header: CalendarHeader,
   Pill: CalendarPill,
+  Card: CalendarCard
 };

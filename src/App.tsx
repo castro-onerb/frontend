@@ -1,13 +1,13 @@
 import { BrowserRouter } from 'react-router-dom';
-import { AuthProvider, AuthContext } from '@/auth/context/AuthProvider';
+import { AuthProvider } from '@/auth/context/AuthProvider';
 import PublicRoutes from './routes/public.route';
 import PrivateRoutes from './routes/private.route';
-import { useContext } from 'react';
 import { GlobalEventsListener } from './routes/GlobalEventsListener';
 import { AuthRedirectListener } from './routes/authRedirectListener';
+import { useAuthStatus } from './auth/hooks/useAuthStatus';
 
 function RoutesSwitcher() {
-  const { isAuthenticated } = useContext(AuthContext);
+  const { isAuthenticated } = useAuthStatus();
 
   if (isAuthenticated === null) {
     return <div>Verificando autenticação...</div>;
