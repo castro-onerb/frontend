@@ -1,12 +1,14 @@
-import type { HTMLAttributes, ReactNode } from "react";
+import clsx from 'clsx';
+import type { HTMLAttributes, ReactNode } from 'react';
 
 interface IRootProps extends HTMLAttributes<HTMLDivElement> {
-  children: ReactNode
+  children: ReactNode;
+  className?: string;
 }
 
-export function InputRoot({ children, ...props }: IRootProps) {
+export function InputRoot({ children, className, ...props }: IRootProps) {
   return(
-    <div {...props} className="flex flex-col gap-1">
+    <div {...props} className={clsx('flex flex-col gap-1', className)}>
       {children}
     </div>
   );

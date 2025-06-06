@@ -16,6 +16,7 @@ interface BaseProps {
   corner?: Corner;
   disabled?: boolean;
   loading?: boolean;
+  onClick?: () => void;
 }
 
 type ButtonAsButton = BaseProps & ButtonHTMLAttributes<HTMLButtonElement> & { href?: undefined };
@@ -31,11 +32,12 @@ export function ButtonRoot({
   color = 'primary',
   corner = 'rounded',
   loading = false,
+  onClick,
   disabled,
   href,
   ...rest
 }: ButtonProps) {
-  const baseClasses = 'inline-flex items-center justify-center leading-none font-medium relative cursor-pointer transition overflow-hidden group';
+  const baseClasses = 'flex items-center leading-none font-medium cursor-pointer overflow-hidden transition group';
 
   const variantClasses = {
     contained: {
@@ -109,7 +111,6 @@ export function ButtonRoot({
   const classes = clsx(
     baseClasses,
     variantClasses[variant][color],
-    sizeClasses[size],
     cornerClasses[corner],
     isDisabled && 'opacity-50 cursor-not-allowed pointer-events-none',
     className
@@ -119,19 +120,19 @@ export function ButtonRoot({
     variant !== 'text' ? (
       <span
         className={clsx(
-          'absolute left-0 aspect-square rounded-full translate-x-[-50%] translate-y-[25%] z-0 group-hover:animate-load-mp',
+          'absolute left-0 aspect-square rounded-full translate-x-[-50%] -translate-y-[25%] z-0 group-hover:animate-load-mp',
           variant === 'contained' ? 'bg-black/20' : rippleBgClasses[color]
         )}
-        style={{ animationDuration: '150ms' }}
+        style={{ animationDuration: '300ms' }}
       />
     ) : null;
 
   const content = (
-    <>
+    <div className={clsx('relative flex items-center gap-2 w-full', sizeClasses[size])}>
       {rippleSpan}
       {loading && <ButtonLoading />}
-      <span className="relative z-1 flex items-center gap-1">{children}</span>
-    </>
+      <span className="relative z-1 flex items-center gap-1 justify-between flex-1">{children}</span>
+    </div>
   );
 
   if (href) {
@@ -149,6 +150,7 @@ export function ButtonRoot({
 
   return (
     <button
+      onClick={onClick}
       type={type}
       className={classes}
       disabled={isDisabled}

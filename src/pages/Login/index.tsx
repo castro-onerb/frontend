@@ -38,7 +38,7 @@ export default function Login () {
   const prepareLogin = async (e?: React.FormEvent<HTMLFormElement>) => {
     if (e) e.preventDefault();
     setLoginError(null);
-    
+
     const newErrors: typeof errors = {};
 
     if (!access.trim()) newErrors.access = 'É necessário informar um acesso';

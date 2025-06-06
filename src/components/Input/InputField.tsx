@@ -56,7 +56,7 @@ export function InputField({
   ...props
 }: IFieldProps) {
   const wrapperClasses = clsx(
-    'relative flex items-center gap-2 rounded-lg transition',
+    'flex items-center gap-2 rounded-lg transition w-auto',
     variantClasses[variant][color],
     disabled && 'opacity-50 pointer-events-none',
     className
@@ -70,7 +70,7 @@ export function InputField({
         value={value}
         onChange={onChange}
         disabled={disabled}
-        className="text-base leading-none flex-1 p-2.5 outline-none bg-transparent"
+        className="text-base leading-none flex-1 p-2.5 outline-none bg-transparent w-full"
         {...props}
       />
       {children}

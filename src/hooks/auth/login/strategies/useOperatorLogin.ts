@@ -57,6 +57,7 @@ export function useOperatorLogin(): OperatorLoginHook {
       return true;
 
     } catch (err: unknown) {
+      console.log(err);
       setError(err instanceof Error ? err.message : 'Erro desconhecido no login do operador.');
       return false;
     } finally {

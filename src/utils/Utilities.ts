@@ -43,3 +43,28 @@ export function FormatDate(date: string) {
 
   return formats;
 }
+
+export function formatHourRange(start: Date, end: Date): string {
+  const formatHour = (date: Date) => {
+    const hour = date.getHours();
+    const minutes = date.getMinutes();
+    const suffix = hour >= 12 ? 'pm' : 'am';
+
+    const hour12 = hour % 12 === 0 ? 12 : hour % 12;
+    return { hour12, minutes, suffix };
+  };
+
+  const startFormatted = formatHour(start);
+  const endFormatted = formatHour(end);
+
+  const startText =
+    startFormatted.minutes === 0
+      ? `${startFormatted.hour12}h`
+      : `${startFormatted.hour12}:${startFormatted.minutes.toString().padStart(2, '0')}h`;
+
+  const endText = `${endFormatted.hour12}:${endFormatted.minutes
+    .toString()
+    .padStart(2, '0')}${endFormatted.suffix}`;
+
+  return `${startText} - ${endText}`;
+}

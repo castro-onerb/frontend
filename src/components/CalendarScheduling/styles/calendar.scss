@@ -1,0 +1,86 @@
+@import 'react-big-calendar/lib/css/react-big-calendar.css';
+
+.rbc-calendar {
+  width: 100%;
+}
+
+.rbc-time-content::-webkit-scrollbar {
+  display: none;
+}
+
+// Cabeçalho
+.rbc-time-header.rbc-overflowing {
+  margin-right: 0px !important;
+}
+
+// Células individuais do cabeçalho
+.rbc-header {
+  padding-block: 20px !important;
+}
+
+// Linha de eventos diários no cabeçalho
+.rbc-allday-cell,
+.rbc-allday-events,
+.rbc-row-bg + .rbc-row-content {
+  display: none !important;
+  height: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+}
+
+// Corpo de eventos do calendário
+.rbc-events-container {
+  margin: 0 !important;
+  // padding-inline: 10px !important;
+}
+
+// Coluna do dia atual (today)
+.rbc-today {
+  background-color: transparent;
+}
+
+// Linhas de tempo no corpo do calendário
+.rbc-time-content {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+// Espaços/células do calendário
+.rbc-time-slot {
+  padding-inline: 10px;
+  display: flex;
+  height: 80px !important;
+  -webkit-box-flex: unset;
+  flex: none !important;
+}
+
+.rbc-today .rbc-event {
+  background-color: #B3ECEA;
+  border-color: #80E0DC !important;
+}
+
+// Card de eventos do calendário
+.rbc-event {
+  padding: 6px;
+  flex-direction: column-reverse !important;
+  border-radius: 6px;
+  width: auto !important;
+  left: 5px !important;
+  right: 5px !important;
+  gap: 4px;
+  background-color: #d3c3ec;
+  border-color: #b79cdf !important;
+}
+.rbc-event-label {
+  display: flex;
+  justify-content: end;
+  width: 100% !important;
+  color: #455a64;
+}
+
+// Indicador de tempo atual
+.rbc-current-time-indicator {
+  height: 3px !important;
+  border-radius: 100px;
+  background-color: #13AFA6 !important;
+}

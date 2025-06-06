@@ -1,4 +1,3 @@
-import { useNavigate } from 'react-router-dom';
 import { useState, useContext } from 'react';
 import { AuthContext } from '@/auth/context/AuthProvider';
 import { API_BASE_URL } from '@/config/api';
@@ -12,7 +11,6 @@ interface UseLogoutHook {
 export function useLogout(): UseLogoutHook {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const navigate = useNavigate();
   const { setIsAuthenticated } = useContext(AuthContext);
 
   async function handleLogout(): Promise<void> {
@@ -33,7 +31,6 @@ export function useLogout(): UseLogoutHook {
         throw new Error('Erro ao encerrar sessão.');
       }
 
-      navigate('/');
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Erro ao sair');
     } finally {

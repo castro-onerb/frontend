@@ -1,4 +1,3 @@
-// calendar-types.ts
 export const CardType = {
   Red: 'red',
   Purple: 'purple',
