@@ -10,3 +10,5 @@ dayjs.extend(localizedFormat);
 
 dayjs.locale('pt-br');
 dayjs.tz.setDefault('America/Fortaleza');
+
+export { dayjs };

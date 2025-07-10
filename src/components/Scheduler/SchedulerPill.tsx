@@ -5,6 +5,7 @@ interface ISchedulerPillProps {
   label: string;
   status: EventColorStatus;
   variant?: 'fill' | 'smooth';
+  className?: string;
 }
 
 const eventStatus: Record<'fill' | 'smooth', Record<EventColorStatus, string>> = {
@@ -26,8 +27,8 @@ const eventStatus: Record<'fill' | 'smooth', Record<EventColorStatus, string>> =
   }
 };
 
-export function SchedulerPill({ label, status = 'emerald', variant = 'fill' }: ISchedulerPillProps) {
+export function SchedulerPill({ label, status = 'emerald', variant = 'fill', className }: ISchedulerPillProps) {
   return (
-    <div className={clsx('p-1 px-1.5 text-xs font-medium leading-none rounded-full', eventStatus[variant]?.[status])}>{label}</div>
+    <div className={clsx('inline p-1 px-1.5 text-xs font-medium leading-none rounded-full', eventStatus[variant]?.[status], className)}>{label}</div>
   );
 }

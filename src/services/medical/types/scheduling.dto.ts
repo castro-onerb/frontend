@@ -1,0 +1,20 @@
+export type SchedulingDTO = {
+  id: string;
+  active: boolean;
+  birth: string;
+  canceledAt: string | null;
+  confirmed: string | null;
+  dateAtendance: string;
+  end: string;
+  exame: string | null;
+  gender: { key: string; label: string };
+  laudo: string | null;
+  modality: string;
+  patientId: { value: number };
+  patientName: string;
+  queueType: string;
+  paid: boolean;
+  procedure: string;
+  start: string;
+  status: string;
+};

@@ -1,12 +1,14 @@
 export interface MyEvent {
   id: string;
   name: string;
+  paid: boolean;
   start: Date;
   end: Date;
   allDay: boolean;
+  situation: string;
   status: 'red' | 'purple' | 'pink' | 'emerald';
-  statusLabel: 'Urgência' | 'P. Especial' | 'Prioridade' | 'Normal',
-  statusLegend: 'Atendimento urgente' | 'Atendimento com prioridade especial' | 'Atendimento normal' | 'Atendimento com prioridade',
+  statusLabel: string,
+  statusLegend: string,
   modality: 'presencial' | 'telemedicina';
   procedure: string;
 }

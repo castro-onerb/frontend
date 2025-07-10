@@ -8,11 +8,15 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip';
 interface SchedulerProps<T extends { start: Date; end: Date; id: string }> {
   events: T[];
   renderEvent: (event: T) => React.ReactNode;
+  onExpandDay?: (date: string) => void;
+  loadingDates?: Set<string>;
 }
 
 export function SchedulerRoot<T extends { start: Date; end: Date; id: string }>({
   events,
-  renderEvent
+  renderEvent,
+  onExpandDay,
+  loadingDates
 }: SchedulerProps<T>) {
   const { viewer } = useViewport(900);
 
@@ -21,7 +25,7 @@ export function SchedulerRoot<T extends { start: Date; end: Date; id: string }>(
     const initial: Record<string, boolean> = {};
     Object.keys(eventsByDay).forEach(date => {
       if (dayjs(date).isSame(dayjs(), 'day')) {
-        initial[date] = true; // dia atual aberto
+        initial[date] = true;
       }
     });
     return initial;
@@ -79,6 +83,7 @@ export function SchedulerRoot<T extends { start: Date; end: Date; id: string }>(
         const isToday = dateObj.isSame(dayjs(), 'day');
         const isOpen = openDates[date];
         const dayLabel = dateObj.format('MMM - ddd').toUpperCase();
+        const isLoadingDay = loadingDates?.has(date);
 
         return (
           <div key={date} className={clsx('flex items-start p-1 border-b border-slate-200', viewer[0] ? 'gap-1' : 'gap-4')}>
@@ -99,6 +104,9 @@ export function SchedulerRoot<T extends { start: Date; end: Date; id: string }>(
 
             {/* Direita: Eventos */}
             <div className="flex-1 flex flex-col gap-2 items-stretch">
+              {isLoadingDay && (
+                <div className="text-xs text-slate-500 italic ml-1">Carregando agendamentos...</div>
+              )}
               {(isOpen ? dailyEvents : [dailyEvents[0]]).map(event => (
                 <div key={event.id}>{renderEvent(event)}</div>
               ))}
@@ -106,7 +114,10 @@ export function SchedulerRoot<T extends { start: Date; end: Date; id: string }>(
               {/* Botão "ver mais" se tiver mais de 1 evento */}
               {!isOpen && dailyEvents.length > 1 && (
                 <button
-                  onClick={() => toggleDate(date)}
+                  onClick={() => {
+                    toggleDate(date);
+                    onExpandDay?.(date);
+                  }}
                   className="text-xs text-primary-500 hover:underline self-start ml-1 cursor-pointer"
                 >
                   + {dailyEvents.length - 1 == 1 ? '1 agendamento' : dailyEvents.length - 1 + ' agendamentos'}
