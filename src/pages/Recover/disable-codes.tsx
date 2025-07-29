@@ -1,4 +1,4 @@
-import { API_BASE_URL } from "@/api/fetchWithAuth";
+import { API_BASE_URL } from "@/shared/api/fetchWithAuth";
 import { Flash } from "@/components/flashMessage/Flash";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useEffect, useState } from "react"

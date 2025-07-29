@@ -1,6 +1,6 @@
 // src/auth/context/AuthProvider.tsx
-import { fetchWithAuth } from '@/api/fetchWithAuth';
-import { API_BASE_URL } from '@/config/api';
+import { fetchWithAuth } from '@/shared/api/fetchWithAuth';
+import { API_BASE_URL } from '@/shared/config/api';
 import {
   createContext,
   useEffect,
@@ -29,7 +29,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     console.log('auth efect');
     const checkAuth = async () => {
       try {
-        const res = await fetchWithAuth(`${API_BASE_URL}/auth/profile`);
+        const res = await fetchWithAuth(`${API_BASE_URL}/auth/me`);
         setIsAuthenticated(res.ok);
       } catch {
         setIsAuthenticated(false);

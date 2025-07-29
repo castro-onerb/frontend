@@ -6,7 +6,7 @@ export function ApiSchedulingPresenter(apiData: SchedulingDTO[] | undefined): My
   if (!apiData) return [];
 
   return apiData.map((item) => {
-    const modality = item.modality === 'in_person' ? 'presencial' : 'telemedicina';
+    const modality = item.modality === 'in_person' ? 'presencial' : item.modality === 'telemedicine' ? 'telemedicina' : 'desconhecida';
 
     type QueueType = 'normal' | 'priority' | 'special' | 'urgent';
     type StatusColor = 'red' | 'purple' | 'pink' | 'emerald';

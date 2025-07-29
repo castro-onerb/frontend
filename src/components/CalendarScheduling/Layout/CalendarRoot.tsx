@@ -9,7 +9,7 @@ import localeData from 'dayjs/plugin/localeData';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 
-import { CalendarCard, type MyEvent } from '@/components/CalendarScheduling/Card/CardRoot';
+import { type MyEvent } from '@/components/CalendarScheduling/Card/CardRoot';
 import { useViewport } from '@/utils/ViewportBool';
 import { useEffect, useState } from 'react';
 import { CalendarDayHeader } from './CalendarDayHeader';
@@ -50,7 +50,6 @@ export function CalendarRoot({ events }: { events: MyEvent[] }) {
       min={min}
       max={max}
       components={{
-        event: CalendarCard,
         header: CalendarDayHeader,
       }}
     />

@@ -39,7 +39,6 @@ export default tseslint.config(
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
     },
   },
-  // >>>> override para vite.config.ts
   {
     files: ['vite.config.ts'],
     languageOptions: {

@@ -9,6 +9,6 @@ export interface MyEvent {
   status: 'red' | 'purple' | 'pink' | 'emerald';
   statusLabel: string,
   statusLegend: string,
-  modality: 'presencial' | 'telemedicina';
+  modality: 'presencial' | 'telemedicina' | 'desconhecida';
   procedure: string;
 }

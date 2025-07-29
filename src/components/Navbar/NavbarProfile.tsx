@@ -46,7 +46,6 @@ export function NavbarProfile({
   const { handleLogout } = useLogout();
 
   const user = useAuthUser();
-  console.log(user);
   const userName = name ?? user?.name ?? 'Usuário';
   const userRole: string = description ?? (
     user?.role === 'operator'

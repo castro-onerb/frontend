@@ -66,6 +66,8 @@ export default function Scheduler() {
         ? queueMap[queueType]
         : queueMap['normal'];
 
+      console.log(item);
+
       for (let i = 0; i < item.count; i++) {
         events.push({
           id: `overview-${idxCounter++}`,

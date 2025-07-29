@@ -1,10 +1,9 @@
-// src/auth/hooks/useAuthUser.ts
 import { jwtDecode } from 'jwt-decode';
 
 type Role = 'operator' | 'medical';
 
 interface JwtPayload {
-  sub: string; // ID do usuário
+  sub: string;
   name?: string;
   role?: Role;
   exp: number;

@@ -24,7 +24,7 @@ export function SchedulerRoot<T extends { start: Date; end: Date; id: string }>(
   const [openDates, setOpenDates] = useState<Record<string, boolean>>(() => {
     const initial: Record<string, boolean> = {};
     Object.keys(eventsByDay).forEach(date => {
-      if (dayjs(date).isSame(dayjs(), 'day')) {
+      if (dayjs(date).isSame(dayjs().weekday(), 'day')) {
         initial[date] = true;
       }
     });

@@ -7,16 +7,18 @@ import { Icon } from '@/components/Icon/Icon';
 import { Input } from '@/components/Input/Input';
 import { useLogin } from '@/hooks/auth/login/useLogin';
 import { useState } from 'react';
-import { Link, redirect } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function Login () {
 
   const [access, setAccess] = useState('');
   const [password, setPassword] = useState('');
   const [togglePassword, setTogglePassword] = useState<'password' | 'text'>('password');
-  const [selectedType, setSelectedType] = useState('');
+  const [crmUF, setCrmUF] = useState('');
   const [errors, setErrors] = useState<{ access?: string; password?: string }>({});
   const [loginError, setLoginError] = useState<string | null>(null);
+
+  const navigate = useNavigate();
 
   const ufs = [
     'AC', 'AL', 'AM', 'AP', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA',
@@ -43,18 +45,18 @@ export default function Login () {
 
     if (!access.trim()) newErrors.access = 'É necessário informar um acesso';
     if (!password.trim()) newErrors.password = 'Por favor, preencha sua senha';
-    if (isCrm && !selectedType) newErrors.access = 'É necessário informar a UF do CRM';
+    if (isCrm && !crmUF) newErrors.access = 'É necessário informar a UF do CRM';
 
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) return;
     
-    const success = await login(isCrm ? `${access}-${selectedType}` : access, password);
+    const success = await login(isCrm ? `${access}-${crmUF}` : access, password);
 
     if (success) {
-      redirect('/');
+      void navigate('/');
     }
 
-    if (error) {
+    if (!success) {
       setLoginError(error);
     }
   };
@@ -99,8 +101,8 @@ export default function Login () {
                 {isCrm && (
                   <Input.Slot>
                     <Input.SelectTrigger
-                      value={selectedType}
-                      onChange={setSelectedType}
+                      value={crmUF}
+                      onChange={setCrmUF}
                       placeholder="UF">
                       <Input.SelectBox>
                         {ufs.map(uf => (

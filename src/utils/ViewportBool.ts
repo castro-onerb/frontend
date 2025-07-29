@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 export function useViewport(...breakpoints: number[]) {
   const sortedBreakpoints = [...breakpoints].sort((a, b) => b - a);
@@ -9,8 +9,8 @@ export function useViewport(...breakpoints: number[]) {
       setViewportWidth(window.innerWidth);
     };
 
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   const matches = sortedBreakpoints.map(bp => viewportWidth < bp);

@@ -1,6 +1,6 @@
 import { useState, useContext } from 'react';
 import { AuthContext } from '@/auth/context/AuthProvider';
-import { API_BASE_URL } from '@/config/api';
+import { API_BASE_URL } from '@/shared/config/api';
 
 interface UseLogoutHook {
   handleLogout: () => Promise<void>;
@@ -18,7 +18,7 @@ export function useLogout(): UseLogoutHook {
     setError(null);
 
     try {
-      const response = await fetch(`${API_BASE_URL}/auth/logout`, {
+      const response = await fetch(`${API_BASE_URL}/auth/me/logout`, {
         method: 'POST',
         credentials: 'include',
       });

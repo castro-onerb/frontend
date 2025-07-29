@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState } from 'react';
 
 interface PasswordErrors {
   password?: string;
@@ -12,23 +12,23 @@ export function usePassword() {
     const newErrors: PasswordErrors = {};
 
     if (password.length < 6) {
-      newErrors.password = "A senha deve ter pelo menos 6 caracteres.";
+      newErrors.password = 'A senha deve ter pelo menos 6 caracteres.';
     }
 
     if (!/[A-Z]/.test(password)) {
-      newErrors.password = "A senha deve conter ao menos uma letra maiúscula.";
+      newErrors.password = 'A senha deve conter ao menos uma letra maiúscula.';
     }
 
     if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
-      newErrors.password = "A senha deve conter ao menos um símbolo.";
+      newErrors.password = 'A senha deve conter ao menos um símbolo.';
     }
 
     if (hasSequentialNumbers(password)) {
-      newErrors.password = "A senha não deve conter números sequenciais.";
+      newErrors.password = 'A senha não deve conter números sequenciais.';
     }
 
     if (confirmPassword !== undefined && password !== confirmPassword) {
-      newErrors.confirmPassword = "As senhas não coincidem.";
+      newErrors.confirmPassword = 'As senhas não coincidem.';
     }
 
     setErrors(newErrors);
