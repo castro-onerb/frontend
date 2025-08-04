@@ -16,6 +16,14 @@ import {
 	type Placement,
 } from '@floating-ui/react';
 import { cloneWithRef } from '@/shared/utils/react/cloneWithRef';
+import { createContext } from 'react';
+
+interface IDropdownContext {
+  open: boolean;
+  setOpen: (value: boolean) => void;
+}
+
+export const DropdownContext = createContext<IDropdownContext | null>(null);
 
 interface IDropdownRootProps {
 	children: ReactElement;
@@ -78,7 +86,7 @@ export function DropdownRoot({
 	}, [open, closeOnClickOutside]);
 
 	return (
-		<>
+		<DropdownContext.Provider value={{ open, setOpen }}>
 			{cloneWithRef(children, referenceRef, {
 				onClick: () => setOpen((o) => !o),
 			})}
@@ -91,6 +99,6 @@ export function DropdownRoot({
 					{dropdown}
 				</div>
 			)}
-		</>
+		</DropdownContext.Provider>
 	);
 }

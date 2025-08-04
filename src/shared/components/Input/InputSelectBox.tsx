@@ -1,121 +1,90 @@
-import { Icon } from "@iconify/react";
+import clsx from 'clsx';
 import {
   createContext,
   useContext,
-  useState,
-  useRef,
-  useEffect,
   type ReactNode,
-} from "react";
-
-interface ISelectBoxProps {
-  children?: ReactNode;
-}
-
-interface ISelectItemProps {
-  value: string;
-  children?: ReactNode;
-}
+} from 'react';
+import { Dropdown } from '../Dropdown/Dropdown';
+import { Icon } from '../Icon/Icon';
+import { DropdownContext } from '../Dropdown/DropdownRoot';
 
 interface ISelectContext {
-  openBox: boolean;
-  setOpenBox: React.Dispatch<React.SetStateAction<boolean>>;
   selected: string;
   setSelected: (value: string) => void;
 }
 
 interface ISelectTriggerProps {
   placeholder?: string;
+	className?: string;
   value: string;
   onChange: (value: string) => void;
-  children?: ReactNode;
+  dropdown?: ReactNode;
 }
 
 const SelectContext = createContext<ISelectContext | null>(null);
 
-export function InputSelectTrigger({ placeholder = "Selecione", value, onChange, children }: ISelectTriggerProps) {
-  const [openBox, setOpenBox] = useState(false);
+export function InputSelect({ placeholder = 'Selecione', value, onChange, dropdown, className }: ISelectTriggerProps) {
 
   return (
-    <SelectContext.Provider value={{ openBox, setOpenBox, selected: value, setSelected: onChange }}>
-      <div
-        onClick={() => setOpenBox(!openBox)}
-        className={`relative flex items-center px-2 py-1 rounded-r-lg bg-primary-500 hover:bg-primary-600 cursor-pointer transition ${openBox && "bg-primary-600"}`}>
-        <span className="select-none text-white flex gap-2 items-center">
-          {value || placeholder}
-          <Icon icon={`picon:down`} />
-        </span>
-      </div>
-      {children}
+    <SelectContext.Provider value={{ selected: value, setSelected: onChange }}>
+			<Dropdown.Root placement='bottom-start' dropdown={dropdown}>
+				<div
+					className={clsx('relative flex items-center px-2 py-1 bg-primary-500 hover:bg-primary-600 cursor-pointer transition', className)}>
+					<span className="select-none text-white flex gap-2 items-center">
+						{value || placeholder}
+						<Icon name='chevron-down' />
+					</span>
+				</div>
+			</Dropdown.Root>
     </SelectContext.Provider>
   );
 }
 
-export function InputSelectBox({ children }: ISelectBoxProps) {
-  const context = useContext(SelectContext);
-  const boxRef = useRef<HTMLDivElement>(null);
-  const [maxHeight, setMaxHeight] = useState<number | undefined>(undefined);
-  const [position, setPosition] = useState<"bottom" | "top">("bottom");
-
-  useEffect(() => {
-    if (!context?.openBox) return;
-
-    const updatePosition = () => {
-      if (boxRef.current) {
-        const rect = boxRef.current.getBoundingClientRect();
-        const spaceBottom = window.innerHeight - rect.top;
-        const spaceTop = rect.top;
-
-        if (spaceBottom < 200 && spaceTop > 200) {
-          setPosition("top");
-          setMaxHeight(spaceTop - 16);
-        } else {
-          setPosition("bottom");
-          setMaxHeight(spaceBottom - 16);
-        }
-      }
-    };
-
-    updatePosition();
-    window.addEventListener("resize", updatePosition);
-    return () => window.removeEventListener("resize", updatePosition);
-  }, [context?.openBox]);
-
-  if (!context?.openBox) return null;
-
-  return (
-    <div
-      ref={boxRef}
-      className={`absolute ${position === "bottom" ? "top-full mt-1" : "bottom-full mb-1"} left-0 bg-white p-1 shadow-lg rounded-xl border border-zinc-200 z-10 overflow-auto box-scrollbar`}
-      style={{ maxHeight }}>
-      {children}
-      <div className="bg-white sticky -bottom-1 flex justify-center">
-        <Icon icon="icon-park-solid:down-one" />
-      </div>
-    </div>
-  );
+interface ISelectItemObject {
+  value: string;
+  label: string;
 }
 
-export function InputSelectItem({ value, children }: ISelectItemProps) {
+interface ISelectItemsProps {
+  items: ISelectItemObject[];
+  render?: (item: ISelectItemObject, selected: boolean) => ReactNode;
+}
+
+export function InputSelectItems({ items, render }: ISelectItemsProps) {
   const context = useContext(SelectContext);
+	
+	const dropdown = useContext(DropdownContext);
 
   if (!context) return null;
 
-  const { setSelected, setOpenBox, selected } = context;
-  const isActive = selected === value;
+  const { setSelected, selected } = context;
 
-  const handleClick = () => {
-    setSelected(value);
-    setOpenBox(false);
-  };
+	const handleClick = (value: string) => {
+		setSelected(value);
+		dropdown?.setOpen(false);
+	};
 
   return (
-    <div
-      onClick={handleClick}
-      className={`px-2 py-1 rounded-lg cursor-pointer transition ${
-        isActive ? "bg-zinc-100 font-medium" : "hover:bg-zinc-100"
-      }`}>
-      {children || value}
+    <div className={clsx('bg-white p-1 shadow-lg rounded-xl border border-zinc-200 z-10 overflow-auto max-h-64 box-scrollbar')}>
+      {items.map((item) => {
+        const isSelected = selected === item.value;
+
+        return (
+          <div
+            key={item.value}
+            onClick={() => handleClick(item.value)}
+            className={clsx(
+              'cursor-pointer px-3 py-2 rounded-md hover:bg-zinc-100 transition',
+              isSelected && 'bg-primary-50 text-primary-700 font-medium'
+            )}
+          >
+            {render ? render(item, isSelected) : item.label}
+          </div>
+        );
+      })}
+			<div className="sticky bg-white -bottom-1 p-1 flex justify-center">
+				<Icon name='chevron-down' />
+			</div>
     </div>
   );
 }

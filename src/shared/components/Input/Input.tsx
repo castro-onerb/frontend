@@ -5,7 +5,7 @@ import { InputIcon } from './InputIcon';
 import { InputLabel } from './InputLabel';
 import { InputMessage } from './InputMessage';
 import { InputRoot } from './InputRoot';
-import { InputSelectBox, InputSelectItem, InputSelectTrigger } from './InputSelectBox';
+import { InputSelectItems, InputSelect } from './InputSelectBox';
 import { CodeInputGroup } from './CodeInputGroup';
 
 export const Input = {
@@ -16,7 +16,6 @@ export const Input = {
   Label: InputLabel,
   Message: InputMessage,
   Slot: InputSlot,
-  SelectTrigger: InputSelectTrigger,
-  SelectBox: InputSelectBox,
-  SelectItem: InputSelectItem
+  Select: InputSelect,
+  SelectItems: InputSelectItems
 };

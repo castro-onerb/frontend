@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { ReactNode } from 'react';
 
 interface InputSlotProps {
   children: ReactNode;
@@ -7,7 +7,7 @@ interface InputSlotProps {
 export function InputSlot({ children }: InputSlotProps) {
 
   return (
-    <div className={`relative flex items-stretch h-full`}>
+    <div className={'relative flex items-stretch  self-stretch min-h-full'}>
       {children}
     </div>
   );

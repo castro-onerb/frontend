@@ -5,7 +5,7 @@ import { Flash } from '@/shared/components/flashMessage/Flash';
 import { Hero } from '@/shared/components/Hero/Hero';
 import { Icon } from '@/shared/components/Icon/Icon';
 import { Input } from '@/shared/components/Input/Input';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useLogin } from './hooks/useLogin';
 
@@ -21,10 +21,35 @@ export default function Login () {
   const navigate = useNavigate();
 
   const ufs = [
-    'AC', 'AL', 'AM', 'AP', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA',
-    'MT', 'MS', 'MG', 'PA', 'PB', 'PR', 'PE', 'PI', 'RJ', 'RN',
-    'RO', 'RR', 'RS', 'SC', 'SP', 'SE', 'TO'
-  ];
+  { value: 'AC', label: 'AC' },
+  { value: 'AL', label: 'AL' },
+  { value: 'AM', label: 'AM' },
+  { value: 'AP', label: 'AP' },
+  { value: 'BA', label: 'BA' },
+  { value: 'CE', label: 'CE' },
+  { value: 'DF', label: 'DF' },
+  { value: 'ES', label: 'ES' },
+  { value: 'GO', label: 'GO' },
+  { value: 'MA', label: 'MA' },
+  { value: 'MT', label: 'MT' },
+  { value: 'MS', label: 'MS' },
+  { value: 'MG', label: 'MG' },
+  { value: 'PA', label: 'PA' },
+  { value: 'PB', label: 'PB' },
+  { value: 'PR', label: 'PR' },
+  { value: 'PE', label: 'PE' },
+  { value: 'PI', label: 'PI' },
+  { value: 'RJ', label: 'RJ' },
+  { value: 'RN', label: 'RN' },
+  { value: 'RO', label: 'RO' },
+  { value: 'RR', label: 'RR' },
+  { value: 'RS', label: 'RS' },
+  { value: 'SC', label: 'SC' },
+  { value: 'SP', label: 'SP' },
+  { value: 'SE', label: 'SE' },
+  { value: 'TO', label: 'TO' }
+];
+
 
   const handleInputAccess = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAccess(e.target.value);
@@ -36,6 +61,10 @@ export default function Login () {
 
   const isCrm = /^[0-9]/.test(access);
   const { login, loading, error } = useLogin(isCrm ? 'medical' : 'operator');
+
+	useEffect(() => {
+		setLoginError(error);
+	}, [error]);
 
   const prepareLogin = async (e?: React.FormEvent<HTMLFormElement>) => {
     if (e) e.preventDefault();
@@ -50,14 +79,13 @@ export default function Login () {
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) return;
     
-    const success = await login(isCrm ? `${access}-${crmUF}` : access, password);
+		const success = await login(isCrm ? `${access}-${crmUF}` : access, password).catch((err) => {
+			setLoginError(typeof err === 'string' ? err : 'Erro desconhecido');
+			return false;
+		});
 
     if (success) {
       void navigate('/');
-    }
-
-    if (!success) {
-      setLoginError(error);
     }
   };
 
@@ -89,7 +117,7 @@ export default function Login () {
             className="relative flex flex-col gap-3">
           {loginError &&
             <Flash.Root onClose={() => setLoginError(null)} className="" variant="error">
-              <Flash.Text textElement={<p>{error}</p>} />
+              <Flash.Text textElement={<p className='text-sm font-light'>{loginError}</p>} />
             </Flash.Root>}
             <Input.Root>
               <Input.Label
@@ -100,18 +128,18 @@ export default function Login () {
                 placeholder="Insira seu CRM ou usuário">
                 {isCrm && (
                   <Input.Slot>
-                    <Input.SelectTrigger
-                      value={crmUF}
-                      onChange={setCrmUF}
-                      placeholder="UF">
-                      <Input.SelectBox>
-                        {ufs.map(uf => (
-                          <Input.SelectItem
-                          key={uf}
-                          value={uf}>{uf}</Input.SelectItem>
-                        ))}
-                      </Input.SelectBox>
-                    </Input.SelectTrigger>
+										<Input.Select 
+											value={crmUF}
+											className='rounded-r-md'
+											onChange={setCrmUF}
+											placeholder='UF'
+											dropdown={
+												<Input.SelectItems items={ufs} render={(item) => (
+													<div className="flex items-center gap-2">
+														<span>{item.label}</span>
+													</div>
+												)} />}
+											/>
                   </Input.Slot>
                 )}
               </Input.Field>

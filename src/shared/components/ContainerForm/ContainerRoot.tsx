@@ -31,7 +31,7 @@ function ContainerDesktop({ children, className }: IContainerProps) {
 }
 
 function ContainerMobile({ children, className }: IContainerProps) {
-  const [height, setHeight] = useState(450);
+  const [height, setHeight] = useState(500);
   const [animateLimit, setAnimateLimit] = useState(false);
 
   const minHeight = 280;
