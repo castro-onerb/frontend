@@ -1,5 +1,5 @@
-import type { MyEvent } from '@/components/CalendarScheduling/Card/CardRoot';
-import { dayjs } from '@/utils/dayjs-config';
+import { dayjs } from '@/shared/config/dayjs.config';
+import type { MyEvent } from '@/shared/components/CalendarScheduling/Card/CardRoot';
 import type { SchedulingDTO } from '../types/scheduling.dto';
 
 export function ApiSchedulingPresenter(apiData: SchedulingDTO[] | undefined): MyEvent[] {
@@ -24,8 +24,8 @@ export function ApiSchedulingPresenter(apiData: SchedulingDTO[] | undefined): My
       return ['normal', 'priority', 'special', 'urgent'].includes(value);
     }
 
-    const statusInfo = isValidQueueType(item.queueType)
-      ? queueMap[item.queueType]
+    const statusInfo = isValidQueueType(item.queue_type)
+      ? queueMap[item.queue_type]
       : queueMap['normal'];
 
     const startLocale = item.start.replace(/Z$/, '');
@@ -33,7 +33,7 @@ export function ApiSchedulingPresenter(apiData: SchedulingDTO[] | undefined): My
 
     return {
       id: item.id,
-      name: item.patientName,
+      name: item.patient_name,
       start: dayjs(startLocale).toDate(),
       end: dayjs(endLocale).toDate(),
       allDay: false,

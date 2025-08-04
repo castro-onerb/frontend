@@ -1,10 +1,10 @@
 import { lazy, Suspense, type ReactElement } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
-const Login = lazy(async () => import('@/pages/Login'));
-const Page404 = lazy(async () => import('@/pages/Errors/Page404'));
-const Recover = lazy(async () => import('@/pages/Recover'));
-const InvalidateCodes = lazy(async () => import('@/pages/Recover/disable-codes'));
+const Login = lazy(async () => import('@/app/pages/Login'));
+const Page404 = lazy(async () => import('@/app/pages/Exceptions/404'));
+const Recover = lazy(async () => import('@/app/pages/Recover/'));
+const InvalidateCodes = lazy(async () => import('@/app/pages/Recover/disable-codes'));
 
 export default function PublicRoutes(): ReactElement {
   return (

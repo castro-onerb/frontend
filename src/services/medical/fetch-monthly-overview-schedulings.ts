@@ -1,6 +1,6 @@
 import { fetchWithAuth } from '@/shared/api/fetchWithAuth';
 import type { MonthlyOverviewDTO } from './types/monthly-overview.dto';
-import { API_BASE_URL } from '@/shared/config/api';
+import { API_BASE_URL } from '@/shared/config/api.config';
 
 type MonthlyOverviewResponse = {
   data: MonthlyOverviewDTO[];

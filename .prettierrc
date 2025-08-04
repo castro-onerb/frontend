@@ -1,4 +1,11 @@
 {
   "singleQuote": true,
-  "semi": true
+  "semi": true,
+  "arrowParens": "always",
+  "endOfLine": "lf",
+  "objectWrap": "preserve",
+  "jsxSingleQuote": true,
+	"quoteProps": "preserve",
+  "bracketSpacing": true,
+  "printWidth": 80
 }

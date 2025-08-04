@@ -1,15 +1,16 @@
 import { BrowserRouter } from 'react-router-dom';
-import { AuthProvider } from '@/auth/context/AuthProvider';
+import { AuthProvider } from '@/shared/auth/context/AuthProvider';
 import {
   QueryClient,
   QueryClientProvider
 } from '@tanstack/react-query';
 import { useState } from 'react';
-import { useAuthStatus } from '@/auth/hooks/useAuthStatus';
+import { useAuthStatus } from '@/shared/auth/hooks/useAuthStatus';
 import { AuthRedirectListener } from '@/routes/authRedirectListener';
 import PrivateRoutes from '@/routes/private.route';
 import PublicRoutes from '@/routes/public.route';
 import { GlobalEventsListener } from '@/routes/GlobalEventsListener';
+import { NavbarProvider } from '@/shared/components/Navbar/context/NavbarProvider';
 
 function RoutesSwitcher() {
   const { isAuthenticated } = useAuthStatus();
@@ -35,7 +36,9 @@ function App() {
       <GlobalEventsListener />
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
-          <RoutesSwitcher />
+					<NavbarProvider>
+          	<RoutesSwitcher />
+					</NavbarProvider>
         </AuthProvider>
       </QueryClientProvider>
     </BrowserRouter>

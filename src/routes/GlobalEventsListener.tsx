@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Connection500 from '@/pages/Errors/Conection500';
-import { API_BASE_URL } from '@/shared/config/api';
+import Page500 from '@/app/pages/Exceptions/500';
+import { API_BASE_URL } from '@/shared/config/api.config';
 
 export function GlobalEventsListener() {
   const navigate = useNavigate();
@@ -50,7 +50,7 @@ export function GlobalEventsListener() {
   }, [hasConnectionError]);
 
   if (hasConnectionError) {
-    return <Connection500 />;
+    return <Page500 />;
   }
 
   return null;

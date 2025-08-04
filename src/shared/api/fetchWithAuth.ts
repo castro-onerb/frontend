@@ -1,4 +1,4 @@
-import { API_BASE_URL } from '@/shared/config/api';
+import { API_BASE_URL } from '@/shared/config/api.config';
 import { z } from 'zod';
 
 function getAccessToken(): string | null {

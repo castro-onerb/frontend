@@ -3,10 +3,10 @@ export interface MonthlyOverviewDTO {
   count: number;
   representative: {
     id: string;
-    patientName: string;
+    patient_name: string;
     start: string;
     end: string;
     modality: 'in_person' | 'telemedicine' | 'unknown';
-    queueType: 'urgency' | 'special' | 'priority' | 'normal';
+    queue_type: 'urgency' | 'special' | 'priority' | 'normal';
   };
 }
