@@ -19,7 +19,7 @@ const RefreshResponseSchema = z.object({
 
 async function refreshAccessToken(): Promise<string | null> {
   try {
-    const res = await fetch(`${API_BASE_URL}/auth/refresh-token`, {
+    const res = await fetch(`${API_BASE_URL}/auth/me/refresh-token`, {
       method: 'POST',
       credentials: 'include',
     });

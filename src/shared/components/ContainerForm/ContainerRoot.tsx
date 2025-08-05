@@ -35,7 +35,7 @@ function ContainerMobile({ children, className }: IContainerProps) {
   const [animateLimit, setAnimateLimit] = useState(false);
 
   const minHeight = 280;
-  const maxHeight = 580;
+  const maxHeight = 650;
 
   return (
     <motion.div

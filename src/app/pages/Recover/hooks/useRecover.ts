@@ -25,6 +25,7 @@ interface UseRecoverHook {
   handleRecover: (email: string) => Promise<void>;
   handleReset: (email: string, code: string, password: string) => Promise<void>;
   handleResendCode: (email: string) => Promise<void>;
+  forceStepReset: (metadata?: Metadata) => void;
 }
 
 export function useRecover(): UseRecoverHook {
@@ -126,11 +127,19 @@ export function useRecover(): UseRecoverHook {
     await handleRecover(email);
   }
 
+	function forceStepReset(metadata?: Metadata) {
+		setStep('reset');
+		if (metadata) {
+			setMetadata(metadata);
+		}
+	}
+
   return {
     loading,
     metadata,
     setMetadata,
     step,
+		forceStepReset,
     handleRecover,
     handleReset,
     handleResendCode,

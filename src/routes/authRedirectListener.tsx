@@ -1,3 +1,4 @@
+import { isPublicRoute } from '@/shared/utils/is-public-route';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -6,7 +7,9 @@ export function AuthRedirectListener() {
 
   useEffect(() => {
     const handler = () => {
-      void navigate('/');
+      if (!isPublicRoute()) {
+        void navigate('/');
+      }
     };
 
     window.addEventListener('auth-failed', handler);

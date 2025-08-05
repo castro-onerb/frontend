@@ -21,8 +21,12 @@ export default function DisableCodes() {
 
     const invalidateCodes = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/auth/invalidate-codes?email=${email}`, {
-          method: 'GET'
+        const response = await fetch(`${API_BASE_URL}/auth/invalidate-codes`, {
+          method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({ email })
         });
 
         if (!response.ok) {

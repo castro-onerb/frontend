@@ -9,11 +9,14 @@ import { Flash } from '@/shared/components/flashMessage/Flash';
 import { Container } from '@/shared/components/ContainerForm/Container';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import { usePassword } from '@/shared/hooks/auth/validations/usePassword';
+import { useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
 export default function Recover() {
 
   const navigate = useNavigate();
-  const { step, metadata, setMetadata, loading, handleRecover, handleReset, handleResendCode } = useRecover();
+  const { step, metadata, setMetadata, loading, handleRecover, handleReset, handleResendCode, forceStepReset } = useRecover();
+	const [searchParams] = useSearchParams();
 
   const [togglePassword, setTogglePassword] = useState<'password' | 'text'>('password');
   const [errors, setErrors] = useState<{ email?: string; code?: string; password?: string, confirmPassword?: string }>({});
@@ -23,6 +26,22 @@ export default function Recover() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const { validate, errors: passwordErrors } = usePassword();
+
+	useEffect(() => {
+		const emailParam = searchParams.get('email');
+		const codeParam = searchParams.get('code');
+
+		console.log(codeParam);
+
+		if (emailParam) setEmail(emailParam);
+		if (codeParam) {
+			setCode(codeParam);
+			forceStepReset({
+				success: true,
+				message: 'Código preenchido automaticamente. Redefina sua senha.',
+			});
+		}
+	}, []);
 
   const handleSubmit = async (e?: React.FormEvent<HTMLFormElement>) => {
     if (e) e.preventDefault();
@@ -62,11 +81,13 @@ export default function Recover() {
     } else if (step === 'reset') {
       await handleReset(email, code, password);
     }
-
-    if (step === 'done') {
-      void navigate('/');
-    }
   };
+
+	useEffect(() => {
+		if (step === 'done') {
+			void navigate('/');
+		}
+	}, [step]);
 
   return (
     <div className="flex items-stretch h-dvh bg-white">
@@ -99,7 +120,7 @@ export default function Recover() {
               <Flash.Text textElement={<p>{metadata.message}</p>} />
             </Flash.Root>
           )}
-          {step !== 'reset' && (<Input.Root>
+          {step !== 'reset' ? (<Input.Root>
             <Input.Label text="E-mail de recuperação" />
             <Input.Field
               name="email"
@@ -108,26 +129,28 @@ export default function Recover() {
               onChange={(e) => setEmail(e.target.value)}
             />
             {errors.email && <Input.Message text={errors.email} />}
-          </Input.Root>)}
+          </Input.Root>) : (<p className='text-slate-600 text-center'>{email}</p>)}
           {step === 'reset' && (
             <>
               <Input.Root>
                 <Input.Codes
                   length={6}
+									value={code}
                   onChange={(val) => setCode(val)}
                   name="code"
                   autoFocus
                 />
                 {errors.code && <Input.Message text={errors.code} />}
               </Input.Root>
-              <button
-                disabled={loading}
-                onClick={() => void handleResendCode(email)}
-                className="text-primary-600 hover:text-primary-700 font-medium hover:underline transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                Não recebi o código
-              </button>
-
+              {step === 'reset' && !code && (
+								<button
+									disabled={loading}
+									onClick={() => void handleResendCode(email)}
+									className="text-primary-600 hover:text-primary-700 font-medium hover:underline transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+								>
+									Não recebi o código
+								</button>
+							)}
               <Input.Root>
                 <Input.Label text="Nova senha" />
                 <Input.Field
