@@ -1,3 +1,4 @@
+import AttendanceLayout from '@/shared/layout/attendance.template';
 import { lazy, Suspense, type ReactElement } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
@@ -11,7 +12,9 @@ export default function PrivateRoutes(): ReactElement {
   return (
     <Suspense fallback={<div>Carregando...</div>}>
       <Routes>
-        <Route path="/" index element={<Scheduler />} />
+        <Route element={<AttendanceLayout />}>
+          <Route path="/" index element={<Scheduler />} />
+        </Route>
 				<Route path="/recover" element={<Recover />} />
 				<Route path="/recover/invalidate" element={<RecoverInvalidate />} />
 				<Route path="/auth/sessions/:id/invalidate" element={<InvalidateSession />} />

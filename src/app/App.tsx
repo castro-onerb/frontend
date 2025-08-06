@@ -37,7 +37,7 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
 					<NavbarProvider>
-          	<RoutesSwitcher />
+						<RoutesSwitcher />
 					</NavbarProvider>
         </AuthProvider>
       </QueryClientProvider>

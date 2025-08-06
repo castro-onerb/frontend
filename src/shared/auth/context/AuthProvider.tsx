@@ -23,8 +23,6 @@ export const AuthContext = createContext<AuthContextProps>({
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 
-  console.log('context', isAuthenticated);
-
   useEffect(() => {
     console.log('auth efect');
     const checkAuth = async () => {
@@ -36,7 +34,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       }
     };
 
-    checkAuth();
+    void checkAuth();
   }, []);
 
   return (

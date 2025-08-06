@@ -20,6 +20,7 @@ import { Button } from '@/shared/components/Button/Button';
 import { MonthYearSelector } from './MonthYearSelector';
 import { getStoredSchedulerDate, saveSchedulerDate } from './helper/scheduler-date.storage';
 import { Icon } from '@/shared/components/Icon/Icon';
+import { useAttendance } from '@/shared/hooks/medical-attendances/hooks/useAttendance';
 
 interface FictionalEvent {
   __isFictional: true;
@@ -33,6 +34,11 @@ export default function Scheduler() {
 	const path = window.location.pathname;
 	const { setActions } = useNavbar('navbar');
 	const { setActions: setActionsScheduler } = useNavbar('scheduler-action');
+	const { attendances } = useAttendance();
+
+	useEffect(() => {
+		console.log(attendances.length);
+	}, [attendances]);
 
 	const [selectedMonth, setSelectedMonth] = useState(() => {
 		const stored = getStoredSchedulerDate();
@@ -43,8 +49,6 @@ export default function Scheduler() {
 		const stored = getStoredSchedulerDate();
 		return stored ? stored.year : dayjs().year();
 	});
-
-	
 
 	const handleSelectDate = (month: number, year: number) => {
 		setSelectedMonth(month);
@@ -67,9 +71,14 @@ export default function Scheduler() {
 				selectedYear={selectedYear}
 				onSelect={handleSelectDate}
 			/>,
+			attendances.length > 0 && (<Button.Root variant='outlined' corner='pill' size='small' color='pink'>
+				<Button.Text className='whitespace-nowrap'>
+					<div className="p-1 rounded-full bg-pink-700 animate-pulse"></div>{attendances.length === 1 ? '1 Atendimento' : `${attendances.length} Atendimentos`}
+				</Button.Text>
+			</Button.Root>),
 			<Button.Root variant='contained' corner='pill' size='small' color='primary'><Button.Text className='whitespace-nowrap'><Icon name='bell:fill' /> Chamar próximo</Button.Text></Button.Root>,
 		]);
-	}, [path, setActionsScheduler, selectedMonth, selectedYear]);
+	}, [path, attendances, setActionsScheduler, selectedMonth, selectedYear]);
 
   function handleExpandDay(date: string) {
     setExpandedDates((prev) =>
