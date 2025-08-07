@@ -3,6 +3,7 @@ import { lazy, Suspense, type ReactElement } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
 const Scheduler = lazy(async () => import('@/app/pages/Scheduler'));
+const Attendance = lazy(async () => import('@/app/pages/Attendance'));
 const InvalidateSession = lazy(async () => import('@/app/pages/Login/invalidate'));
 const Recover = lazy(async () => import('@/app/pages/Recover/'));
 const RecoverInvalidate = lazy(async () => import('@/app/pages/Recover/disable-codes'));
@@ -14,6 +15,7 @@ export default function PrivateRoutes(): ReactElement {
       <Routes>
         <Route element={<AttendanceLayout />}>
           <Route path="/" index element={<Scheduler />} />
+          <Route path="/attendance/:attendanceId" element={<Attendance />} />
         </Route>
 				<Route path="/recover" element={<Recover />} />
 				<Route path="/recover/invalidate" element={<RecoverInvalidate />} />

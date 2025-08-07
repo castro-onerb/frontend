@@ -21,6 +21,8 @@ import { MonthYearSelector } from './MonthYearSelector';
 import { getStoredSchedulerDate, saveSchedulerDate } from './helper/scheduler-date.storage';
 import { Icon } from '@/shared/components/Icon/Icon';
 import { useAttendance } from '@/shared/hooks/medical-attendances/hooks/useAttendance';
+import { InitiateAttendanceById } from '@/shared/services/attendance/initiate-attendance-by-id';
+import { useNavigate } from 'react-router-dom';
 
 interface FictionalEvent {
   __isFictional: true;
@@ -34,6 +36,7 @@ export default function Scheduler() {
 	const path = window.location.pathname;
 	const { setActions } = useNavbar('navbar');
 	const { setActions: setActionsScheduler } = useNavbar('scheduler-action');
+
 	const { attendances } = useAttendance();
 
 	useEffect(() => {
@@ -298,6 +301,27 @@ export default function Scheduler() {
 
 function EventSchedulerDropdown({ event }: { event: FetchSchedulerByDayResponse }) {
 	const birthYears = dayjs(dayjs()).diff(event.birth, 'year');
+	const navigate = useNavigate();
+	const { refresh, current } = useAttendance();
+
+	const [loading, setLoading] = useState(false);
+
+	const handleStartAttendance = async () => {
+		if (loading) return;
+		setLoading(true);
+		try {
+			const response = await InitiateAttendanceById(event.id);
+			await refresh();
+			if (current && Number(response.id) !== Number(current.id)) {
+				void navigate(`attendance/${response.id}`);
+			}
+		} catch (err) {
+			console.error('Erro ao iniciar atendimento', err);
+		} finally {
+			setLoading(false);
+		}
+	};
+
   return (
     <div className="flex flex-col">
       <div className="p-3 border-b border-slate-200">
@@ -308,10 +332,21 @@ function EventSchedulerDropdown({ event }: { event: FetchSchedulerByDayResponse 
 				</div>
 			</div>
 			<div className="py-3 flex gap-2">
-				<Button.Root corner='pill' size='small' variant='outlined'>
-					<Button.Text>Chamar</Button.Text>
+				<Button.Root
+					onClick={() => {
+						void handleStartAttendance();
+					}}
+					corner='pill'
+					size='small'
+					variant='outlined'
+					disabled={loading}>
+					<Button.Text>{loading ? 'Chamando...' : 'Chamar'}</Button.Text>
 				</Button.Root>
-				<Button.Root color='red' corner='pill' size='small' variant='outlined'>
+				<Button.Root
+					color='red'
+					corner='pill'
+					size='small'
+					variant='outlined'>
 					<Button.Text>Faltou</Button.Text>
 				</Button.Root>
 			</div>

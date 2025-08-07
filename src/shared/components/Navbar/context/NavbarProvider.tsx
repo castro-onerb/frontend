@@ -41,7 +41,7 @@ export function NavbarProvider({ children }: { children: ReactNode }) {
 				actions = [];
 				backTo = undefined;
 				notify();
-			},
+			}
 		};
 
 		return value;

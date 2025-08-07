@@ -6,7 +6,8 @@ import { InitiateAttendanceByIdPresenter } from './presenters/initiate-attendanc
 export async function InitiateAttendanceById(attendance_id: string) {
 	const response = await fetchWithAuth(`${API_BASE_URL}/attendance/start`, {
 		method: 'POST',
-		body: JSON.stringify({ attendance_id })
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({ attendance_id: Number(attendance_id) })
 	});
 
 	const result = await response.json() as InitiateAttendanceByIdDto;
